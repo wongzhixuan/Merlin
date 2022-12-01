@@ -1,0 +1,155 @@
+<div class="verticle-center">
+  <ion-grid class="ion-padding-top">
+    <ion-row>
+      <ion-col>
+        <img
+          src="../../../assets/images/learning_illust_1.png"
+          alt="login_illustration"
+          height="130"
+          class="illustration"
+        />
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding-top">
+      <ion-col class="ion-text-center">
+        <ion-label class="header">LOGIN</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row class="padding">
+      <ion-col size="12" class="padding-2">
+        <ion-label class="content-2 font" size="12">Login As</ion-label>
+      </ion-col>
+    </ion-row>
+    <form [formGroup]="loginForm" novalidate (ngSubmit)="submitForm()">
+      <ion-radio-group formControlName="role" mode="md">
+        <ion-row class="padding">
+          <ion-col class="padding-2">
+            <ion-item
+              lines="none"
+              class="ion-no-padding ion-item font content-1"
+            >
+              <ion-label>Student</ion-label>
+              <ion-radio slot="start" value="Student" checked></ion-radio>
+            </ion-item>
+          </ion-col>
+
+          <ion-col class="padding-2">
+            <ion-item
+              lines="none"
+              class="ion-no-padding ion-item font content-1"
+            >
+              <ion-label>Teacher</ion-label>
+              <ion-radio slot="start" value="Teacher"></ion-radio>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-radio-group>
+      <ion-row
+        class="ion-justify-content-center ion-align-items-center margin-top-1 margin-bottom-1"
+      >
+        <ion-col size="10">
+          <ion-item fill="outline" mode="md" class="font content-2">
+            <ion-icon slot="start" name="mail-outline"></ion-icon>
+            <ion-label position="floating">Email Address</ion-label>
+            <ion-input
+              type="email"
+              placeholder="Email Address"
+              clearInput="true"
+              class="font content-2"
+              formControlName="email"
+            ></ion-input>
+          </ion-item>
+          <span
+            class="font content-3 error-message"
+            *ngIf="isSubmitted && errorControl.email.errors?.required"
+            >Email Address is required.</span
+          >
+          <span
+            class="font content-3 error-message"
+            *ngIf="isSubmitted && (errorControl.email.errors?.email || errorControl.email.errors?.pattern)"
+            >Email Address is invalid.</span
+          >
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <ion-col size="10">
+          <ion-item fill="outline" mode="md" class="font content-2">
+            <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input
+              type="password"
+              placeholder="Password"
+              #pwdInput
+              class="font content-2"
+              formControlName="password"
+            ></ion-input>
+            <ion-icon
+              slot="end"
+              class="show-option"
+              [hidden]="showPassword"
+              name="eye-off"
+              (click)="onToggleShow()"
+            ></ion-icon>
+            <ion-icon
+              slot="end"
+              class="hide-option"
+              [hidden]="!showPassword"
+              name="eye"
+              (click)="onToggleShow()"
+            ></ion-icon>
+          </ion-item>
+          <span
+            class="font content-3 error-message"
+            *ngIf="isSubmitted && errorControl.password.errors?.required"
+            >Password is required.</span
+          >
+          <span
+            class="font content-3 error-message"
+            *ngIf="
+              isSubmitted &&
+              (errorControl.password.errors?.pattern ||
+                errorControl.password.errors?.minLength)
+            "
+            >Password should be >= 6 characters with at least 1 Uppercase, 1
+            Lowercase, 1 Numeric, and 1 Special Characters</span
+          >
+        </ion-col>
+      </ion-row>
+      <ion-row class="padding-right-1 margin-bottom-1">
+        <ion-col class="padding-2">
+          <ion-button
+            fill="clear"
+            class="ion-float-end content-3 font btn"
+            (click)="onPasswordRecoveryClick()"
+          >
+            <ion-icon name="lock-open-outline" slot="start"></ion-icon> Forget
+            Password
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row
+        class="ion-justify-content-center ion-align-items-center margin-bottom-1"
+      >
+        <ion-col size="10">
+          <ion-button
+            expand="block"
+            class="content-1 font bold"
+            mode="ios"
+            type="submit"
+            >LOGIN</ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </form>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-label class="content-3 font">Don't have an account?</ion-label>
+      <ion-button
+        fill="clear"
+        color="primary"
+        class="font content-3 btn"
+        (click)="onSignUpClick()"
+        >Sign Up</ion-button
+      >
+    </ion-row>
+  </ion-grid>
+</div>

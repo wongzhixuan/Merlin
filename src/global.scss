@@ -16,7 +16,7 @@
 @import "~@ionic/angular/css/normalize.css";
 @import "~@ionic/angular/css/structure.css";
 @import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
+@import "~@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "~@ionic/angular/css/padding.css";
@@ -24,3 +24,83 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+@font-face {
+  font-family: Archieve;
+  src: url(assets/fonts/Archive-Regular.ttf);
+}
+
+@font-face {
+  font-family: Gilroy-Medium;
+  src: url(assets/fonts/Gilroy-Medium.ttf);
+}
+
+@font-face {
+  font-family: Gilroy-Extrabold;
+  src: url(assets/fonts/Gilroy-ExtraBold.otf);
+}
+
+ion-content {
+  --offset-bottom: auto !important;
+  --overflow: hidden;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.header {
+  font-size: 28px;
+  font-family: Archieve;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.header-2{
+  font-size: 20px;
+}
+
+.header-3{
+  font-size: 18px;
+}
+
+.content-1 {
+  font-size: 15px;
+}
+
+.content-2 {
+  font-size: 14px;
+}
+.content-3 {
+  font-size: 12px;
+}
+.content-4 {
+  font-size: 16px;
+}
+.font {
+  font-family: Gilroy-Medium;
+}
+
+.font-gilroy-extrabold{
+  font-family: Gilroy-Extrabold;
+}
+
+.margin-top-1 {
+  margin-top: 10px;
+}
+
+.margin-bottom-1 {
+  margin-bottom: 10px;
+}
+
+.margin-top-2{
+  margin-top: 40px;
+}
+
+.error-message {
+  color: var(--ion-color-danger);
+}
+
+

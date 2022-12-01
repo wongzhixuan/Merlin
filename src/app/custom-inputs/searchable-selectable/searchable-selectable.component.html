@@ -1,0 +1,52 @@
+<div *ngIf="selected.length; else placeholder">
+  <div *ngFor="let item of selected; let last = last" >
+    <img [src]="leafIcon(item)"  height="20px" *ngIf="icon" class="iconDisplay" >
+  <span >
+    {{leaf(item)}} {{last ? "": ", "}}
+  </span>
+</div>
+</div>
+<ng-template #placeholder>
+  <div *ngIf="selectedData.length > 0; else placeholderShow">
+  <div *ngFor="let item of selectedData; let last = last" >
+    <img [src]="item.flag"  height="20px" *ngIf="icon" class="iconDisplay" >
+  <span >
+    {{item.name}} {{last ? "": ", "}}
+  </span>
+</div>
+</div>
+<ng-template #placeholderShow>
+  <span>Nationality</span>
+</ng-template>
+</ng-template>
+<ion-modal [isOpen]="isOpen">
+  <ng-template>
+    <ion-header class="ion-no-border" mode="md">
+      <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+          <ion-button (click)="cancel()" mode="ios">Cancel</ion-button>
+        </ion-buttons>
+        <ion-title class="font header-2 bold">{{title}}</ion-title>
+        <ion-buttons slot="end" *ngIf="multiple">
+          <ion-button (click)="select()" mode="ios">Select</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+      <ion-toolbar mode="ios">
+        <ion-searchbar (ionChange)="filter($event)" mode="ios"></ion-searchbar>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-item *ngFor="let item of filtered"
+      (click)="itemSelected()">
+        <ion-checkbox slot="start" mode="ios" [(ngModel)]="item.selected"
+        ></ion-checkbox>
+        <ion-avatar *ngIf="icon" class="countryImg">
+          <img [src]="leafIcon(item)"/>
+        </ion-avatar>
+        <ion-label class="bold text">{{leaf(item)}}</ion-label>
+
+      </ion-item>
+    </ion-content>
+  </ng-template>
+
+</ion-modal>

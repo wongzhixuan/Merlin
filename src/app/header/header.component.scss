@@ -1,0 +1,24 @@
+ion-avatar {
+  width:23px !important;
+  height: 23px !important;
+}
+
+.coin-text{
+  font-size: 16px;
+  font-family: Gilroy-Medium;
+  font-weight: bolder;
+}
+
+ion-spinner{
+  width:18px;
+  height: 18px;
+  margin-left: 10px;
+}
+
+#notifications-badge {
+  background-color: var(--ion-color-primary);
+  position: absolute;
+  top: -3px;
+  right: -5px;
+  font-size: 10px;
+}

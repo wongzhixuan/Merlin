@@ -1,0 +1,340 @@
+<app-header [back]="back"></app-header>
+<ion-content class="ion-padding">
+  <ion-grid>
+    <!--Display content-->
+    <div *ngIf="isLoaded && !isEdit">
+      <ion-row>
+        <ion-col size="12">
+          <div class="preview">
+            <ion-avatar>
+              <img
+                *ngIf="userProfile?.imageUrl; else placheolder_avatar"
+                [src]="userProfile.imageUrl"
+                [alt]="userProfile.username"
+              />
+              <ng-template #placheolder_avatar>
+                <div class="fallback">
+                  <p>Select avatar</p>
+                </div>
+              </ng-template>
+            </ion-avatar>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center ion-margin-top">
+          <ion-label class="title">{{ userProfile.username }}</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-no-padding ion-text-center">
+          <span class="subtitle">{{ userProfile.role }}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-no-padding ion-text-center">
+          <span class="subtitle">{{ user.email }}</span>
+        </ion-col>
+      </ion-row>
+      <div class="divider"></div>
+      <ion-row
+        class="ion-margin-start ion-margin-end ion-padding-start ion-padding-end ion-margin-top ion-align-items-center"
+      >
+        <ion-col size="auto">
+          <ion-avatar class="icon">
+            <img [src]="genderIcon" />
+          </ion-avatar>
+        </ion-col>
+        <ion-col class="ion-padding-start">
+          <ion-label class="infoText"
+            >Gender:
+            {{
+              userProfile.gender === "" ? "Undefined" : userProfile.gender
+            }}</ion-label
+          >
+        </ion-col>
+      </ion-row>
+
+      <ion-row
+        class="ion-margin-start ion-margin-end ion-padding-start ion-padding-end ion-margin-top ion-align-items-center"
+      >
+        <ion-col size="auto">
+          <ion-avatar class="icon">
+            <img [src]="nationalityIcon" />
+          </ion-avatar>
+        </ion-col>
+        <ion-col class="ion-padding-start">
+          <ion-label class="infoText"
+            >Nationality:
+            {{
+              userProfile.nationality === ""
+                ? "Undefined"
+                : userProfile.nationality
+            }}</ion-label
+          >
+        </ion-col>
+      </ion-row>
+
+      <ion-row
+        class="ion-margin-start ion-margin-end ion-padding-start ion-padding-end ion-margin-top ion-align-items-center"
+      >
+        <ion-col size="auto">
+          <ion-avatar class="icon">
+            <img [src]="schoolIcon" />
+          </ion-avatar>
+        </ion-col>
+        <ion-col class="ion-padding-start">
+          <ion-label class="infoText"
+            >School:
+            {{
+              userProfile.school === "" ? "Undefined" : userProfile.school
+            }}</ion-label
+          >
+        </ion-col>
+      </ion-row>
+
+      <ion-button
+        expand="block"
+        mode="ios"
+        class="margin-top-2"
+        (click)="onEditClick()"
+      >
+        <ion-icon slot="start" name="pencil" class="absolute-icon"></ion-icon>
+        Edit Profile
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        mode="ios"
+        class="margin-top-1"
+        (click)="changePassword()"
+      >
+        <ion-icon slot="start" name="key" class="absolute-icon"></ion-icon>
+        Change Password
+      </ion-button>
+    </div>
+
+    <!-- Display edit view-->
+    <div *ngIf="isLoaded && isEdit">
+      <form #profileForm novalidate (ngSubmit)="submitForm()">
+        <ion-row>
+          <ion-col size="12">
+            <div class="preview">
+              <ion-avatar (click)="changeImage()">
+                <img
+                  *ngIf="userProfile?.imageUrl; else placheolder_avatar"
+                  [src]="userProfile.imageUrl"
+                  [alt]="userProfile.username"
+                />
+                <ng-template #placheolder_avatar>
+                  <div class="fallback">
+                    <p>Select avatar</p>
+                  </div>
+                </ng-template>
+              </ion-avatar>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="ion-text-center ion-margin-top">
+            <ion-label class="title">{{ userProfile.username }}</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-no-padding ion-text-center">
+            <span class="subtitle">{{ userProfile.role }}</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-no-padding ion-text-center">
+            <span class="subtitle">{{ user.email }}</span>
+          </ion-col>
+        </ion-row>
+        <div class="divider"></div>
+        <ion-row class="ion-padding-start ion-margin-top">
+          <ion-row class="padding">
+            <ion-col size="12" class="padding-2">
+              <ion-label class="content-2 font" size="12">Gender</ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-radio-group
+            name="gender"
+            mode="md"
+            [(ngModel)]="userProfile.gender"
+          >
+            <ion-row class="padding">
+              <ion-col class="padding-2">
+                <ion-item
+                  lines="none"
+                  class="ion-no-padding ion-item font content-1"
+                >
+                  <ion-icon
+                    name="male-outline"
+                    class="radioIcon"
+                    color="primary"
+                  ></ion-icon>
+                  <ion-label>Male</ion-label>
+                  <ion-radio slot="start" value="Male"></ion-radio>
+                </ion-item>
+              </ion-col>
+
+              <ion-col class="padding-2">
+                <ion-item
+                  lines="none"
+                  class="ion-no-padding ion-item font content-1"
+                >
+                  <ion-icon
+                    name="female-outline"
+                    class="radioIcon"
+                    color="danger"
+                  ></ion-icon>
+                  <ion-label>Female</ion-label>
+                  <ion-radio slot="start" value="Female"></ion-radio>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-radio-group>
+        </ion-row>
+
+        <ion-row class="ion-margin-top ion-align-items-center">
+          <ion-col>
+            <ion-item fill="outline" mode="md" class="font content-2" lines="none" (click)="select.open()" >
+              <ion-icon slot="start" name="earth-outline"></ion-icon>
+
+              <app-searchable-selectable #select title="Select Nationality"
+              [data]="countries"
+              itemTextField="name.common"
+              (selectedChanged)="selectChanged($event)"
+              [icon]="true"
+              itemImageField="flags.png"
+              [selectedData]="selectedCountryData"
+              >
+            </app-searchable-selectable>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row
+          class="ion-justify-content-center ion-align-items-center margin-top-1 margin-bottom-1"
+        >
+          <ion-col>
+            <ion-item fill="outline" mode="md" class="font content-2">
+              <ion-icon slot="start" name="school-outline"></ion-icon>
+              <ion-label position="floating">School</ion-label>
+              <ion-input
+                type="text"
+                placeholder="School"
+                clearInput="true"
+                class="font content-2"
+                [(ngModel)]="userProfile.school"
+                name="school"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-button
+          expand="block"
+          mode="ios"
+          class="margin-top-2"
+          type="submit"
+        >
+          Save
+        </ion-button>
+        <ion-button
+          expand="block"
+          mode="ios"
+          class="margin-top-1"
+          (click)="onCancel()"
+        >
+          Cancel
+        </ion-button>
+      </form>
+    </div>
+
+    <!-- Display loading text-->
+    <div *ngIf="!isLoaded">
+      <ion-row>
+        <ion-col size="12">
+          <div class="preview">
+            <ion-avatar>
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-avatar>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center ion-margin-top">
+          <ion-label class="title"
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-no-padding ion-text-center">
+          <span class="subtitle"
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-no-padding ion-text-center">
+          <span class="subtitle"
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></span>
+        </ion-col>
+      </ion-row>
+      <div class="divider"></div>
+      <ion-row
+        class="ion-margin-start ion-margin-end ion-padding-start ion-padding-end ion-margin-top ion-align-items-center"
+      >
+        <ion-col size="auto">
+          <ion-avatar class="icon">
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col class="ion-padding-start">
+          <ion-label class="infoText"
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></ion-label>
+        </ion-col>
+      </ion-row>
+
+      <ion-row
+        class="ion-margin-start ion-margin-end ion-padding-start ion-padding-end ion-margin-top ion-align-items-center"
+      >
+        <ion-col size="auto">
+          <ion-avatar class="icon">
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col class="ion-padding-start">
+          <ion-label class="infoText"
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></ion-label>
+        </ion-col>
+      </ion-row>
+
+      <ion-row
+        class="ion-margin-start ion-margin-end ion-padding-start ion-padding-end ion-margin-top ion-align-items-center"
+      >
+        <ion-col size="auto">
+          <ion-avatar class="icon">
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col class="ion-padding-start">
+          <ion-label class="infoText"
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-button expand="block" mode="ios" class="margin-top-2">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-button>
+
+      <ion-button expand="block" mode="ios" class="margin-top-1">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-button>
+    </div>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,53 @@
+.illustration {
+  display: block;
+  margin: 0 auto;
+}
+
+.dynamic-height {
+  height: auto;
+  min-height: 30px;
+}
+
+.padding {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.padding-2 {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.ion-item {
+  --padding-end: 0px;
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+  --inner-padding-start: 0px;
+  --highlight-color-valid: var(--ion-color-primary);
+}
+
+.btn {
+  text-transform: none;
+}
+
+.padding-right-1 {
+  padding-right: 10px;
+}
+
+.verticle-center {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+ion-input {
+  --padding-top: 10px !important;
+  --padding-bottom: auto !important;
+  button {
+    align-self: center;
+  }
+}
+
+.btnSignUp{
+  margin-top: 20px;
+}

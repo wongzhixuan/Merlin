@@ -1,0 +1,29 @@
+<ion-header mode="md" class="ion-no-border">
+  <ion-toolbar *ngIf="!back; else enableBack">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+      <ion-item slot="end" class="ion-no-padding" lines="none">
+      <ion-avatar>
+        <img [src]="coinIcon" alt="Coins" >
+      </ion-avatar>
+      <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+      <ion-label class="ion-margin-start coin-text" *ngIf="!isLoading">{{userProfile?.points}}</ion-label>
+    </ion-item>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" color="dark" name="notifications-outline" >
+        </ion-icon>
+        <ion-badge id="notifications-badge" color="primary" mode="md">5</ion-badge>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ng-template #enableBack>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/main/tabs/dashboard"></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ng-template>
+</ion-header>
+

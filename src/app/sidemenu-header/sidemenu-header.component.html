@@ -1,0 +1,18 @@
+<ion-header class="ion-no-border ion-padding-top ion-margin-top">
+
+  <ion-item lines="none" class="ion-align-items-center" *ngIf="isLoaded">
+  <ion-avatar>
+    <img *ngIf="userProfile?.imageUrl; else placeholder" [src]="userProfile?.imageUrl" [alt]="userProfile?.username" >
+    <ng-template #placeholder>
+      <img [src]="avatarImg" [alt]="userProfile?.username"/>
+    </ng-template>
+  </ion-avatar>
+  <ion-label class="ion-margin-start">{{user?.email}}</ion-label>
+  </ion-item>
+  <ion-item lines="none" class="ion-align-items-center" *ngIf="!isLoaded">
+    <ion-avatar>
+      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+    </ion-avatar>
+    <ion-label class="ion-margin-start"><ion-skeleton-text [animated]="true"></ion-skeleton-text></ion-label>
+    </ion-item>
+</ion-header>

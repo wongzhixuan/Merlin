@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "merlin-gamified-lms": {
+      "hosting": {
+        "app": [
+          "merlin-gamified-lms"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "merlin-gamified-lms"
+  }
+}
