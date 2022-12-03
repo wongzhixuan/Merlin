@@ -6,18 +6,19 @@
       <ion-row>
         <ion-col size="12">
           <div class="preview">
-            <ion-avatar>
-              <img
-                *ngIf="userProfile?.imageUrl; else placheolder_avatar"
-                [src]="userProfile.imageUrl"
-                [alt]="userProfile.username"
-              />
-              <ng-template #placheolder_avatar>
-                <div class="fallback">
-                  <p>Select avatar</p>
-                </div>
-              </ng-template>
-            </ion-avatar>
+            <!-- <ion-avatar>
+
+            </ion-avatar> -->
+            <img
+              *ngIf="this.userProfileImage; else placheolder_avatar"
+              [src]="this.userProfileImage"
+              [alt]="userProfile.username"
+            />
+            <ng-template #placheolder_avatar>
+              <div class="fallback">
+                <p>Select avatar</p>
+              </div>
+            </ng-template>
           </div>
         </ion-col>
       </ion-row>
@@ -119,19 +120,20 @@
       <form #profileForm novalidate (ngSubmit)="submitForm()">
         <ion-row>
           <ion-col size="12">
-            <div class="preview">
-              <ion-avatar (click)="changeImage()">
-                <img
-                  *ngIf="userProfile?.imageUrl; else placheolder_avatar"
-                  [src]="userProfile.imageUrl"
-                  [alt]="userProfile.username"
-                />
-                <ng-template #placheolder_avatar>
-                  <div class="fallback">
-                    <p>Select avatar</p>
-                  </div>
-                </ng-template>
-              </ion-avatar>
+            <div class="preview" (click)="changeImage()">
+              <!-- <ion-avatar >
+
+              </ion-avatar> -->
+              <img
+                *ngIf="userProfile?.imageUrl; else placheolder_avatar"
+                [src]="userProfile.imageUrl"
+                [alt]="userProfile.username"
+              />
+              <ng-template #placheolder_avatar>
+                <div class="fallback">
+                  <p>Select avatar</p>
+                </div>
+              </ng-template>
             </div>
           </ion-col>
         </ion-row>
@@ -198,18 +200,26 @@
 
         <ion-row class="ion-margin-top ion-align-items-center">
           <ion-col>
-            <ion-item fill="outline" mode="md" class="font content-2" lines="none" (click)="select.open()" >
+            <ion-item
+              fill="outline"
+              mode="md"
+              class="font content-2"
+              lines="none"
+              (click)="select.open()"
+            >
               <ion-icon slot="start" name="earth-outline"></ion-icon>
 
-              <app-searchable-selectable #select title="Select Nationality"
-              [data]="countries"
-              itemTextField="name.common"
-              (selectedChanged)="selectChanged($event)"
-              [icon]="true"
-              itemImageField="flags.png"
-              [selectedData]="selectedCountryData"
+              <app-searchable-selectable
+                #select
+                title="Select Nationality"
+                [data]="countries"
+                itemTextField="name.common"
+                (selectedChanged)="selectChanged($event)"
+                [icon]="true"
+                itemImageField="flags.png"
+                [selectedData]="selectedCountryData"
               >
-            </app-searchable-selectable>
+              </app-searchable-selectable>
             </ion-item>
           </ion-col>
         </ion-row>

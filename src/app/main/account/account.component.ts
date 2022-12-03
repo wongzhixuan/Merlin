@@ -24,7 +24,7 @@ export class AccountComponent implements OnInit, AfterContentInit {
   genderIcon = '../../assets/icon/gender.png';
   nationalityIcon = '../../assets/icon/countries.png';
   schoolIcon = '../../assets/icon/school.png';
-
+  userProfileImage = null;
   profileForm: FormGroup;
   countries: any;
 
@@ -49,6 +49,7 @@ export class AccountComponent implements OnInit, AfterContentInit {
     this.userDataService.getProfile().subscribe((data) => {
       this.userProfile = data;
       this.isLoaded = true;
+      this.userProfileImage = data.imageUrl;
     });
     console.log(this.userProfile);
   }

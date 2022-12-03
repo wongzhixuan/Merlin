@@ -8,6 +8,15 @@ ion-avatar {
 .preview {
   display: flex;
   justify-content: center;
+
+  img{
+    width: 128px;
+    height: 128px;
+    border: #bfbfbf solid 2px;
+    padding: 10px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 }
 
 .fallback {
