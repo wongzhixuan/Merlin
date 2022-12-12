@@ -10,10 +10,14 @@ import { SidemenuHeaderComponent } from './sidemenu-header/sidemenu-header.compo
 import { AccountComponent } from './main/account/account.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchableSelectableComponent } from './custom-inputs/searchable-selectable/searchable-selectable.component';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ManagePasswordComponent } from './main/account/manage-password/manage-password/manage-password.component';
 import { SwiperModule } from 'swiper/angular';
 import { CoursesComponent } from './main/courses/courses.component';
+import { AssignmentDetailsComponent } from './main/assignments/assignment-details/assignment-details.component';
+import { LeaderboardComponent } from './main/leaderboard/leaderboard.component';
+import { BadgesComponent } from './main/badges/badges.component';
+
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -24,8 +28,10 @@ import { CoursesComponent } from './main/courses/courses.component';
     SidemenuHeaderComponent,
     AccountComponent,
     ManagePasswordComponent,
-    CoursesComponent
-
+    CoursesComponent,
+    AssignmentDetailsComponent,
+    LeaderboardComponent,
+    BadgesComponent
   ],
   imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule,SearchableSelectableComponent, HttpClientModule, SwiperModule],
   exports: [
@@ -36,7 +42,11 @@ import { CoursesComponent } from './main/courses/courses.component';
     AchievementsComponent,
     SidemenuHeaderComponent,
     AccountComponent,
-    ManagePasswordComponent
+    ManagePasswordComponent,
+    CoursesComponent,
+    AssignmentDetailsComponent,
+    LeaderboardComponent,
+    BadgesComponent
   ],
 })
 export class SharedModule {}

@@ -1,0 +1,42 @@
+@import '../dashboard/dashboard.component.scss';
+
+.lecturerImg {
+  padding-right: 5px;
+  ion-avatar {
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important; //any size
+    max-height: 28px !important; //any size
+    img {
+      width: 28px !important;
+      height: 28px !important;
+      object-fit: cover;
+    }
+  }
+}
+.toolImg{
+  border-radius: 50%;
+  background-color: white;
+}
+
+.lessonCard{
+  border: var(--ion-color-light) solid 2px;
+  box-shadow: none;
+  width: 100% !important;
+  margin: 0px !important;
+  background-color: var(--ion-color-light);
+  background: var(--ion-color-light);
+  border-radius: 10px;
+}
+
+.lessonBtn{
+  --border-radius: 10px!important;
+  // --border-color: grey;
+  // --border-width: 1.5px;
+  --background: #e0e0e0;
+
+}
+.lessonList{
+  --background-color: transparent;
+  background-color: transparent;
+}

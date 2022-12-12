@@ -16,8 +16,10 @@ export class SearchableSelectableComponent implements OnChanges, OnInit {
   @Input() multiple = false;
   @Input() itemTextField = 'name';
   @Input() itemImageField = 'icon';
+  @Input() itemAccessField = 'name';
   @Input() icon = false;
-  @Input() selectedData: CountryData[] = [];
+  @Input() selectedData: any[] = [];
+  @Input() defaultText = 'Nationality';
   @Output() selectedChanged: EventEmitter<any> = new EventEmitter();
 
   isOpen = false;
@@ -28,7 +30,7 @@ export class SearchableSelectableComponent implements OnChanges, OnInit {
   ngOnInit(): void {
       if(this.selectedData.length > 0){
         for(const each of this.selectedData){
-          const dataFound = this.data.filter(item => this.leaf(item).includes(each.name));
+          const dataFound = this.data.filter(item => this.leaf(item).includes(this.leafAccess(each)));
           this.selected.push(dataFound[0]);
         }
         console.log(this.selected);
@@ -74,6 +76,8 @@ export class SearchableSelectableComponent implements OnChanges, OnInit {
   this.itemTextField.split('.').reduce((value,el) => value[el],obj);
   leafIcon = (obj) =>
   this.itemImageField.split('.').reduce((value,el) => value[el],obj);
+  leafAccess = (obj) =>
+  this.itemAccessField.split('.').reduce((value,el) => value[el],obj);
 }
 
 

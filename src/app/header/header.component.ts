@@ -12,6 +12,7 @@ export class HeaderComponent implements OnInit {
   isLoading = true;
   //points = 0;
   @Input() back = false;
+  @Input() title = null;
   userProfile = null;
   constructor(private userDataService: UserDataService) { }
 

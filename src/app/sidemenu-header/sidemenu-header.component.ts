@@ -1,4 +1,5 @@
-import { Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserAuthService } from '../services/user-auth.service';
 import { UserDataService } from '../services/user-data.service';
 
 @Component({
@@ -7,19 +8,18 @@ import { UserDataService } from '../services/user-data.service';
   styleUrls: ['./sidemenu-header.component.scss'],
 })
 export class SidemenuHeaderComponent implements OnInit {
-  @Input()isLoaded = false;
+  @Input() isLoaded = false;
   @Input() userProfile = null;
   @Input() user = null;
-  avatarImg='assets/images/user.png';
-  constructor(private userDataService: UserDataService) {
-
-   }
+  avatarImg = 'assets/images/user.png';
+  constructor(private userDataService: UserDataService, private authService: UserAuthService) {}
 
   ngOnInit() {
-    this.userDataService.getProfile().subscribe((data) => {
-      this.userProfile = data;
-      this.isLoaded = true;
-    });
+    if (this.authService.getUser() !== null) {
+      this.userDataService.getProfile().subscribe((data) => {
+        this.userProfile = data;
+        this.isLoaded = true;
+      });
+    }
   }
-
 }

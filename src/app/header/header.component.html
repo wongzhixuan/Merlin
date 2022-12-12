@@ -23,6 +23,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/main/tabs/dashboard"></ion-back-button>
       </ion-buttons>
+      <ion-title *ngIf="title !== null" class="font header-3 bold">{{title}}</ion-title>
     </ion-toolbar>
   </ng-template>
 </ion-header>

@@ -12,13 +12,12 @@ import { UserDataService } from './services/user-data.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
-
   public appPages = [
     { title: 'Profile', url: 'main/account', icon: 'person-circle' },
-    { title: 'Chat', url: 'main/tabs/chat', icon: 'chatbubble-ellipses' },
-    { title: 'Assignments', url: 'main/tabs/assignments', icon: 'heart' },
+    { title: 'Badges', url: 'main/badges', icon: 'ribbon' },
+    { title: 'Leaderboard', url: 'main/leaderboard', icon: 'medal' },
     //{ title: 'Calendar', url: 'tabs/calendar', icon: 'calendar' },
-    { title: 'Achievements', url: 'main/tabs/achievements', icon: 'trash' },
+    //{ title: 'Achievements', url: 'main/tabs/achievements', icon: 'trash' },
     //{ title: 'Spam', url: '/folder/Spam', icon: 'warning' },
   ];
   userProfile = null;
@@ -34,11 +33,8 @@ export class AppComponent implements OnInit {
     private userDataService: UserDataService
   ) {
     this.initializeApp();
-
   }
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   async onLogOutClick() {
     const loading = await this.feedback.createLoading();
@@ -57,11 +53,13 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onMenuOpen(){
+  onMenuOpen() {
     this.user = this.authService.getUser();
-    this.userDataService.getProfile().subscribe((data) => {
-      this.userProfile = data;
-      this.isLoaded = true;
-    });
+    if (this.authService.getUser() !== null) {
+      this.userDataService.getProfile().subscribe((data) => {
+        this.userProfile = data;
+        this.isLoaded = true;
+      });
+    }
   }
 }

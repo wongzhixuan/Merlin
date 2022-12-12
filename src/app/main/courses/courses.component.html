@@ -1,4 +1,378 @@
-<app-header [back]="true"></app-header>
+<app-header [back]="true" [title]="title"></app-header>
 <ion-content>
-  
+  <ion-grid>
+    <!-- Course Details -->
+    <div
+      *ngIf="isCourseDetails"
+      class="ion-padding-start ion-padding-end"
+    >
+      <ion-row>
+        <ion-col size="12">
+          <ion-label class="header-4 font bold">{{
+            currentCourse.courseName !== "" &&
+            currentCourse.courseName !== undefined
+              ? currentCourse.courseName
+              : "No Course Name"
+          }}</ion-label>
+        </ion-col>
+        <ion-col size="12">
+          <ion-row class="avatarRow ion-align-items-center">
+            <ion-col size="auto" class="ion-no-padding lecturerImg">
+              <ion-avatar>
+                <div
+                  *ngIf="
+                    currentCourse.lecturerImageUrl !== '' &&
+                      currentCourse.lecturerImageUrl !== undefined;
+                    else defaultLecturerImage
+                  "
+                >
+                  <img
+                    [alt]="currentCourse.lecturerName"
+                    [src]="currentCourse.lecturerImageUrl"
+                  />
+                </div>
+              </ion-avatar>
+            </ion-col>
+            <ion-col
+              class="ion-align-items-center ion-no-padding ion-text-start"
+            >
+              <ion-label class="font ion-no-margin content-2">
+                {{
+                  currentCourse.lecturerName !== "" &&
+                  currentCourse.lecturerName !== undefined
+                    ? currentCourse.lecturerName
+                    : "Unknown"
+                }}
+              </ion-label>
+            </ion-col>
+            <ion-col size="auto">
+              <ion-button
+                color="primary"
+                mode="ios"
+                [disabled]="!this.unenrolled"
+                class="font content-2"
+                (click)="onEnrollCourse()"
+                >Enroll Course</ion-button
+              >
+            </ion-col>
+          </ion-row>
+        </ion-col>
+
+        <ion-col size="12">
+          <span class="content-2 font bold">Description</span>
+        </ion-col>
+        <ion-col size="12">
+          <span class="content-3 font">{{
+            currentCourse.courseDescription
+          }}</span>
+        </ion-col>
+        <div *ngIf="currentCourse.tools" class="ion-padding-top">
+          <ion-col size="12">
+            <span class="content-2 font bold">Tools</span>
+          </ion-col>
+          <ion-col size="12">
+            <ion-row>
+              <ion-col *ngFor="let each of currentCourse.tools" size="auto">
+                <ion-row class="ion-align-items-center">
+                  <ion-col size="auto" class="ion-align-items-center">
+                    <img
+                      [src]="
+                        each.toolImgUrl !== '' && each.toolImgUrl !== undefined
+                          ? each.toolImgUrl
+                          : defaultToolImg
+                      "
+                      width="30"
+                      height="30"
+                      class="toolImg"
+                    />
+                  </ion-col>
+                  <ion-col
+                    class="ion-no-padding ion-align-items-center ion-text-center"
+                    ><span class="font content-3">{{
+                      each.toolName
+                    }}</span></ion-col
+                  >
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </div>
+
+        <ion-col size="12">
+          <span class="content-2 font bold">Lessons</span>
+        </ion-col>
+        <ion-col size="12" *ngIf="this.nolesson">
+          <ion-card class="lessonCard ion-align-items-center">
+            <ion-label class="font bold content-3"
+              >The lessons are not ready yet!</ion-label
+            >
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="this.unenrolled">
+          <ion-card class="lessonCard ion-align-items-center">
+            <ion-label class="font bold content-3"
+              >Please enroll to explore more!</ion-label
+            >
+          </ion-card>
+        </ion-col>
+
+        <ion-col
+          size="12"
+          *ngFor="let lesson of currentCourse.lessons; let i = index"
+        >
+          <ion-card class="lessonCard">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item
+                    lines="none"
+                    class="content-2 font bold"
+                    color="none"
+                    button
+                    (click)="onLessonClick(i)"
+                  >
+                    <ion-label class="content-2 font bold">{{
+                      lesson.title !== undefined && lesson.title !== ""
+                        ? lesson.title
+                        : "Lesson"
+                    }}</ion-label>
+                    <ion-icon
+                      name="chevron-down-outline"
+                      slot="end"
+                      *ngIf="!this.displayLessonDetails[i]"
+                    ></ion-icon>
+                    <ion-icon
+                      name="chevron-up-outline"
+                      slot="end"
+                      *ngIf="this.displayLessonDetails[i]"
+                    ></ion-icon>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row
+                class="ion-justify-content-center"
+                *ngIf="this.displayLessonDetails[i]"
+              >
+                <ion-col
+                  size="11"
+                  *ngFor="let material of lesson.materials; let j = index"
+                >
+                  <ion-item
+                    lines="none"
+                    class="lessonBtn content-2 font"
+                    button
+                    (click)="onLessonMaterialClick(material.url)"
+                  >
+                    <ion-icon
+                      name="play-circle"
+                      slot="start"
+                      *ngIf="material.type === 0"
+                    ></ion-icon>
+                    <ion-icon
+                      name="link"
+                      slot="start"
+                      *ngIf="material.type === 1"
+                    ></ion-icon>
+                    <ion-label class="content-2 font">{{
+                      material.description !== "" &&
+                      material.description !== undefined
+                        ? material.description
+                        : "No Description"
+                    }}</ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </div>
+    <!-- My Courses-->
+    <div *ngIf="isEnrolledCourses">
+      <ion-row>
+        <ion-col size="12">
+          <ion-list class="ion-margin-start ion-margin-end">
+            <!-- <div *ngIf="isLoaded[2]; else displayLoading3"> -->
+            <div *ngFor="let each of this.myCourses">
+              <ion-card
+                mode="ios"
+                class="card ion-no-margin ion-margin-bottom"
+                (click)="onCardClick(each)"
+              >
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="4" class="ion-margin-end">
+                      <div
+                        *ngIf="
+                          each.imageUrl !== '' && each.imageUrl !== undefined;
+                          else defaultCardImage
+                        "
+                      >
+                        <img
+                          [alt]="each.courseName"
+                          [src]="each.imageUrl"
+                          class="cardImg"
+                        />
+                      </div>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>
+                        <ion-label
+                          class="ion-float-start font content-4 bold"
+                          >{{
+                            each.courseName !== "" &&
+                            each.courseName !== undefined
+                              ? each.courseName
+                              : "No Course Name"
+                          }}</ion-label
+                        >
+                      </ion-row>
+                      <ion-row class="avatarRow ion-align-items-center">
+                        <ion-col
+                          size="auto"
+                          class="ion-no-padding avatarLecturer"
+                        >
+                          <ion-avatar>
+                            <div
+                              *ngIf="
+                                each.lecturerImageUrl !== '' &&
+                                  each.lecturerImageUrl !== undefined;
+                                else defaultLecturerImage
+                              "
+                            >
+                              <img
+                                [alt]="each.lecturerName"
+                                [src]="each.lecturerImageUrl"
+                              />
+                            </div>
+                          </ion-avatar>
+                        </ion-col>
+                        <ion-col
+                          class="ion-align-items-center ion-no-padding ion-text-start courseLecturerName"
+                        >
+                          <ion-label
+                            class="font courseLecturerName ion-no-margin"
+                          >
+                            {{
+                              each.lecturerName !== "" &&
+                              each.lecturerName !== undefined
+                                ? each.lecturerName
+                                : "Unknown"
+                            }}
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
+                      <!-- progress bar -->
+                      <ion-row>
+                        <ion-progress-bar
+                          [value]="each.progress"
+                          style="width: 100%"
+                        ></ion-progress-bar>
+                      </ion-row>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card>
+            </div>
+            <!-- </div> -->
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </div>
+    <!-- All Courses-->
+    <div *ngIf="isAllCourses">
+      <ion-row>
+        <ion-col size="12">
+          <ion-list class="ion-margin-start ion-margin-end">
+            <!-- <div *ngIf="isLoaded[2]; else displayLoading3"> -->
+            <div *ngFor="let each of this.allCourses">
+              <ion-card
+                mode="ios"
+                class="card ion-no-margin ion-margin-bottom"
+                (click)="onCardClick(each)"
+              >
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="4" class="ion-margin-end">
+                      <div
+                        *ngIf="
+                          each.imageUrl !== '' && each.imageUrl !== undefined;
+                          else defaultCardImage
+                        "
+                      >
+                        <img
+                          [alt]="each.courseName"
+                          [src]="each.imageUrl"
+                          class="cardImg"
+                        />
+                      </div>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>
+                        <ion-label
+                          class="ion-float-start font content-4 bold"
+                          >{{
+                            each.courseName !== "" &&
+                            each.courseName !== undefined
+                              ? each.courseName
+                              : "No Course Name"
+                          }}</ion-label
+                        >
+                      </ion-row>
+                      <ion-row class="avatarRow ion-align-items-center">
+                        <ion-col
+                          size="auto"
+                          class="ion-no-padding avatarLecturer"
+                        >
+                          <ion-avatar>
+                            <div
+                              *ngIf="
+                                each.lecturerImageUrl !== '' &&
+                                  each.lecturerImageUrl !== undefined;
+                                else defaultLecturerImage
+                              "
+                            >
+                              <img
+                                [alt]="each.lecturerName"
+                                [src]="each.lecturerImageUrl"
+                              />
+                            </div>
+                          </ion-avatar>
+                        </ion-col>
+                        <ion-col
+                          class="ion-align-items-center ion-no-padding ion-text-start courseLecturerName"
+                        >
+                          <ion-label
+                            class="font courseLecturerName ion-no-margin"
+                          >
+                            {{
+                              each.lecturerName !== "" &&
+                              each.lecturerName !== undefined
+                                ? each.lecturerName
+                                : "Unknown"
+                            }}
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card>
+            </div>
+            <!-- </div> -->
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-grid>
 </ion-content>
+
+<!--default image-->
+<ng-template #defaultLecturerImage>
+  <img src="../../../assets/images/user.png" />
+</ng-template>
+
+<ng-template #defaultCardImage>
+  <img src="../../../assets/images/learning_illust_1.png" class="cardImg" />
+</ng-template>

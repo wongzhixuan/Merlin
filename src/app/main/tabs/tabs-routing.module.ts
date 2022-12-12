@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AccountComponent } from '../account/account.component';
 import { AchievementsComponent } from '../achievements/achievements.component';
+import { AssignmentDetailsComponent } from '../assignments/assignment-details/assignment-details.component';
 import { AssignmentsComponent } from '../assignments/assignments.component';
 import { ChatComponent } from '../chat/chat.component';
 import { CoursesComponent } from '../courses/courses.component';
@@ -19,17 +20,17 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: DashboardComponent
+            component: DashboardComponent,
           },
           {
             path: 'courses',
             children: [
               {
                 path: '',
-                component: CoursesComponent
-              }
-            ]
-          }
+                component: CoursesComponent,
+              },
+            ],
+          },
         ],
       },
       {
@@ -37,7 +38,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: ChatComponent
+            component: ChatComponent,
           },
         ],
       },
@@ -46,7 +47,16 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: AssignmentsComponent
+            component: AssignmentsComponent,
+          },
+          {
+            path: 'details',
+            children: [
+              {
+                path: '',
+                component: AssignmentDetailsComponent,
+              },
+            ],
           },
         ],
       },
@@ -55,7 +65,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: AchievementsComponent
+            component: AchievementsComponent,
           },
         ],
       },
@@ -73,8 +83,8 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: '/dashboard',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

@@ -1,326 +1,433 @@
 <app-header></app-header>
 <ion-content>
   <ion-grid class="ion-no-margin ion-margin-bottom">
-    <ion-row>
+    <!-- Searchbar -->
+    <!-- <ion-row>
       <ion-col size="12" class="ion-padding-start ion-padding-end">
         <ion-searchbar class="custom" mode="md"></ion-searchbar>
       </ion-col>
-    </ion-row>
-    <ion-row>
+    </ion-row> -->
+
+    <!-- Recent Visit -->
+    <ion-row *ngIf="this.recentVisit.length > 0">
       <ion-col
         size="12"
         class="ion-padding-start ion-padding-end titleContainer"
       >
         <label class="font bold header-3 titleText">Recent Visits</label>
+      </ion-col>
+      <ion-col size="12" class="ion-no-padding ion-padding-bottom">
+        <swiper
+          [slidesPerView]="1"
+          [initialSlide]="0"
+          *ngIf="isLoaded[0]; else displayLoading"
+        >
+          <ng-template swiperSlide *ngFor="let each of this.recentVisit">
+            <ion-card
+              mode="ios"
+              class="card ion-no-margin ion-margin-bottom ion-margin-start ion-margin-end"
+              (click)="onCardClick(each)"
+            >
+              <ion-grid>
+                <ion-row>
+                  <!-- course image -->
+                  <ion-col size="4" class="ion-margin-end">
+                    <div
+                      *ngIf="
+                        each.imageUrl !== '' && each.imageUrl !== undefined;
+                        else defaultCardImage
+                      "
+                    >
+                      <img
+                        [alt]="each.courseName"
+                        [src]="each.imageUrl"
+                        class="cardImg"
+                      />
+                    </div>
+                  </ion-col>
+                  <ion-col>
+                    <!-- course name -->
+                    <ion-row>
+                      <ion-label class="ion-float-start font content-4 bold">{{
+                        each.courseName !== "" && each.courseName !== undefined
+                          ? each.courseName
+                          : "No Course Name"
+                      }}</ion-label>
+                    </ion-row>
+                    <!-- lecturer -->
+                    <ion-row class="avatarRow ion-align-items-center">
+                      <ion-col
+                        size="auto"
+                        class="ion-no-padding avatarLecturer"
+                      >
+                        <ion-avatar>
+                          <div
+                            *ngIf="
+                              each.lecturerImageUrl !== '' &&
+                                each.lecturerImageUrl !== undefined;
+                              else defaultLecturerImage
+                            "
+                          >
+                            <img
+                              [alt]="each.lecturerName"
+                              [src]="each.lecturerImageUrl"
+                            />
+                          </div>
+                        </ion-avatar>
+                      </ion-col>
+                      <ion-col
+                        class="ion-align-items-center ion-no-padding ion-text-start courseLecturerName"
+                      >
+                        <ion-label
+                          class="font courseLecturerName ion-no-margin"
+                        >
+                          {{
+                            each.lecturerName !== "" &&
+                            each.lecturerName !== undefined
+                              ? each.lecturerName
+                              : "Unknown"
+                          }}
+                        </ion-label>
+                      </ion-col>
+                    </ion-row>
+                    <!-- progress bar -->
+                    <ion-row>
+                      <ion-progress-bar
+                        [value]="each.progress"
+                        style="width: 100%"
+                      ></ion-progress-bar>
+                    </ion-row>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card>
+          </ng-template>
+        </swiper>
+      </ion-col>
+    </ion-row>
+
+    <!-- My Courses -->
+    <ion-row *ngIf="this.myCourses.length > 0">
+      <ion-col
+        size="12"
+        class="ion-padding-start ion-padding-end titleContainer"
+      >
+        <label class="font bold header-3 titleText">My Courses</label>
         <ion-button
           class="font content-3 btnSeeAll"
           fill="clear"
           color="medium"
           mode="ios"
           size="small"
-          (click)="onSeeAllClick(0)"
+          (click)="onSeeAllClick(1)"
           >See All</ion-button
         >
       </ion-col>
       <ion-col size="12" class="ion-no-padding ion-padding-bottom">
-        <swiper [slidesPerView]="1.05" [spaceBetween]="20" [initialSlide]="0">
-          <ng-template swiperSlide
-            ><ion-card
-              mode="ios"
-              class="card ion-no-margin ion-margin-bottom ion-margin-start"
-            >
-              <ion-grid >
-                <ion-row>
-                  <ion-col size="4" class="ion-margin-end">
-                    <img
-                      alt="Silhouette of mountains"
-                      src="https://ionicframework.com/docs/img/demos/card-media.png"
-                      class="cardImg"
-                    />
-                  </ion-col>
-                  <ion-col>
-                    <ion-row>
-                      <ion-label class="ion-float-start font content-4 bold"
-                        >Course Title</ion-label
-                      >
-                    </ion-row>
-                    <ion-row class="avatarRow">
-                      <ion-col size="auto" class="ion-no-padding avatarLecturer">
-                        <ion-avatar>
+        <div *ngIf="isLoaded[1]; else displayLoading2">
+          <swiper [slidesPerView]="1.5" [spaceBetween]="10" [initialSlide]="0">
+            <ng-template swiperSlide *ngFor="let each of this.myCourses">
+              <ion-card
+                mode="ios"
+                class="cardVertical ion-no-margin ion-margin-bottom ion-margin-start"
+                (click)="onCardClick(each)"
+                ><div
+                  *ngIf="
+                    each.imageUrl !== '' && each.imageUrl !== undefined;
+                    else defaultVerticalCardImage
+                  "
+                >
+                  <img
+                    [alt]="each.courseName"
+                    [src]="each.imageUrl"
+                    class="verticalCardImg"
+                  />
+                </div>
+
+                <ion-card-header>
+                  <ion-card-title class="ion-text-start font content-4 bold">{{
+                    each.courseName !== "" && each.courseName !== undefined
+                      ? each.courseName
+                      : "No Course Name"
+                  }}</ion-card-title>
+                </ion-card-header>
+
+                <ion-card-content class="content-3 ion-align-items-center">
+                  <ion-row class="ion-padding-bottom">
+                    <ion-col size="auto" class="ion-no-padding avatarLecturer">
+                      <ion-avatar>
+                        <div
+                          *ngIf="
+                            each.lecturerImageUrl !== '' &&
+                              each.lecturerImageUrl !== undefined;
+                            else defaultLecturerImage
+                          "
+                        >
                           <img
-                            src="https://material.angular.io/assets/img/examples/shiba1.jpg"
+                            [alt]="each.lecturerName"
+                            [src]="each.lecturerImageUrl"
                           />
-                        </ion-avatar>
-                      </ion-col>
-                      <ion-col class="ion-align-self-center ion-no-padding ion-text-start">
-                        <ion-label class="font content-3 ion-no-margin " >
-                          Marty McFly
-                        </ion-label>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-progress-bar
-                        value="0.5"
-                        style="width: 100%"
-                      ></ion-progress-bar>
-                    </ion-row>
-                  </ion-col>
-                  <!-- <ion-col
-                    size="auto"
-                    class="ion-align-self-center ion-no-padding"
-                  >
-                    <ion-button fill="clear" size="small" color="dark">
-                      <ion-icon
-                        slot="icon-only"
-                        name="chevron-forward-outline"
-                      ></ion-icon>
-                    </ion-button>
-                  </ion-col> -->
-                </ion-row>
-              </ion-grid> </ion-card
-          ></ng-template>
-          <ng-template swiperSlide
-            ><ion-card
-              mode="ios"
-              class="card ion-no-margin ion-margin-bottom ion-margin-start"
-            >
-              <ion-grid>
-                <ion-row>
-                  <ion-col size="4">
-                    <img
-                      alt="Silhouette of mountains"
-                      src="https://ionicframework.com/docs/img/demos/card-media.png"
-                      class="cardImg"
-                    />
-                  </ion-col>
-                  <ion-col>
-                    <ion-row>
-                      <ion-label class="ion-float-start font content-4 bold"
-                        >Course Title</ion-label
-                      >
-                    </ion-row>
-                    <ion-row class="avatarRow">
-                      <ion-col size="auto" class="ion-no-padding">
-                        <ion-avatar>
-                          <img
-                            src="https://material.angular.io/assets/img/examples/shiba1.jpg"
-                          />
-                        </ion-avatar>
-                      </ion-col>
-                      <ion-col class="ion-align-self-center ion-no-padding">
-                        <h2 class="content-3 ion-no-margin ion-text-start">
-                          Marty McFly
-                        </h2>
-                      </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-progress-bar
-                        value="0.5"
-                        style="width: 100%"
-                      ></ion-progress-bar>
-                    </ion-row>
-                  </ion-col>
-                  <ion-col
-                    size="auto"
-                    class="ion-align-self-center ion-no-padding"
-                  >
-                    <ion-button fill="clear" size="small" color="dark">
-                      <ion-icon
-                        slot="icon-only"
-                        name="chevron-forward-outline"
-                      ></ion-icon>
-                    </ion-button>
-                  </ion-col>
-                </ion-row>
-              </ion-grid> </ion-card
-          ></ng-template>
-          <ng-template swiperSlide
-            ><ion-card
-              mode="ios"
-              class="ion-no-margin ion-margin-bottom ion-margin-start"
-            >
-              <ion-grid>
-                <ion-row>
-                  <ion-col size="4">
-                    <img
-                      alt="Silhouette of mountains"
-                      src="https://ionicframework.com/docs/img/demos/card-media.png"
-                    />
-                  </ion-col>
-                  <ion-col>
-                    <ion-item lines="none">
-                      <ion-avatar item-start>
-                        <img
-                          src="https://material.angular.io/assets/img/examples/shiba1.jpg"
-                        />
+                        </div>
                       </ion-avatar>
-                      <h2 class="content-3">Marty McFly</h2>
-                    </ion-item>
-                    <ion-card-content>
-                      <p class="content-3">
-                        Wait a minute. Wait a minute, Doc. Uhhh... Are you
-                        telling me that you built a time machine... out of a
-                        DeLorean?! Whoa. This is heavy.
-                      </p>
-                    </ion-card-content>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card></ng-template
-          >
-        </swiper>
+                    </ion-col>
+                    <ion-col
+                      class="ion-align-items-center ion-no-padding ion-text-start courseLecturerName"
+                    >
+                      <ion-label class="font courseLecturerName ion-no-margin">
+                        {{
+                          each.lecturerName !== "" && each.lecturerName !== undefined
+                            ? each.lecturerName
+                            : "Unknown"
+                        }}
+                      </ion-label>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-progress-bar
+                      [value]="each.progress"
+                      style="width: 100%"
+                    ></ion-progress-bar>
+                  </ion-row>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+          </swiper>
+        </div>
       </ion-col>
     </ion-row>
+
+    <!--Popular Courses -->
     <ion-row>
-      <ion-col size="12" class="ion-padding-start ion-padding-end">
-        <label class="font bold header-3">Recent Visits</label>
+      <ion-col
+        size="12"
+        class="ion-padding-start ion-padding-end titleContainer"
+      >
+        <label class="font bold header-3 titleText">All Courses</label>
+        <ion-button
+          class="font content-3 btnSeeAll"
+          fill="clear"
+          color="medium"
+          mode="ios"
+          size="small"
+          (click)="onSeeAllClick(2)"
+          >See All</ion-button
+        >
       </ion-col>
       <ion-col size="12" class="ion-no-padding ion-padding-bottom">
-        <swiper [slidesPerView]="1.5" [spaceBetween]="20" [initialSlide]="0">
-          <ng-template swiperSlide>
-            <ion-card
-              mode="ios"
-              class="ion-no-margin ion-margin-bottom ion-margin-start"
-            >
-              <img
-                alt="Silhouette of mountains"
-                src="https://ionicframework.com/docs/img/demos/card-media.png"
-              />
-              <ion-card-header>
-                <ion-card-title class="content-3">Card Title</ion-card-title>
-                <ion-card-subtitle class="content-3"
-                  >Card Subtitle</ion-card-subtitle
-                >
-              </ion-card-header>
-
-              <ion-card-content class="content-3">
-                Here's a small text description for the card content. Nothing
-                more, nothing less.
-              </ion-card-content>
-            </ion-card>
-          </ng-template>
-          <ng-template swiperSlide
-            ><ion-card
-              mode="ios"
-              class="ion-no-margin ion-margin-bottom ion-margin-start"
-            >
-              <img
-                alt="Silhouette of mountains"
-                src="https://ionicframework.com/docs/img/demos/card-media.png"
-              />
-              <ion-card-header>
-                <ion-card-title class="content-3">Card Title</ion-card-title>
-                <ion-card-subtitle class="content-3"
-                  >Card Subtitle</ion-card-subtitle
-                >
-              </ion-card-header>
-
-              <ion-card-content class="content-3">
-                Here's a small text description for the card content. Nothing
-                more, nothing less.
-              </ion-card-content>
-            </ion-card></ng-template
-          >
-          <ng-template swiperSlide
-            ><ion-card
-              mode="ios"
-              class="ion-no-margin ion-margin-bottom ion-margin-start"
-            >
-              <img
-                alt="Silhouette of mountains"
-                src="https://ionicframework.com/docs/img/demos/card-media.png"
-              />
-              <ion-card-header>
-                <ion-card-title class="content-3">Card Title</ion-card-title>
-                <ion-card-subtitle class="content-3"
-                  >Card Subtitle</ion-card-subtitle
-                >
-              </ion-card-header>
-
-              <ion-card-content class="content-3">
-                Here's a small text description for the card content. Nothing
-                more, nothing less.
-              </ion-card-content>
-            </ion-card></ng-template
-          >
-        </swiper>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="12" class="ion-padding-start ion-padding-end">
-        <label class="font bold header-3">Recent Visits</label>
-      </ion-col>
-      <ion-col size="12" class="ion-no-padding ion-padding-bottom">
-        <swiper [slidesPerView]="1.5" [spaceBetween]="20" [initialSlide]="0">
-          <ng-template swiperSlide>
-            <ion-card
-              class="cardDisplay"
-              mode="ios"
-              class="ion-no-margin ion-margin-bottom ion-margin-start"
-            >
-              <img
-                alt="Silhouette of mountains"
-                src="https://ionicframework.com/docs/img/demos/card-media.png"
-              />
-              <ion-card-header>
-                <ion-card-title class="content-3">Card Title</ion-card-title>
-                <ion-card-subtitle class="content-3"
-                  >Card Subtitle</ion-card-subtitle
-                >
-              </ion-card-header>
-
-              <ion-card-content class="content-3">
-                Here's a small text description for the card content. Nothing
-                more, nothing less.
-              </ion-card-content>
-            </ion-card>
-          </ng-template>
-          <ng-template swiperSlide
-            ><ion-card
-              mode="ios"
-              class="ion-no-margin ion-margin-bottom ion-margin-start"
-            >
-              <img
-                alt="Silhouette of mountains"
-                src="https://ionicframework.com/docs/img/demos/card-media.png"
-              />
-              <ion-card-header>
-                <ion-card-title class="content-3">Card Title</ion-card-title>
-                <ion-card-subtitle class="content-3"
-                  >Card Subtitle</ion-card-subtitle
-                >
-              </ion-card-header>
-
-              <ion-card-content class="content-3">
-                Here's a small text description for the card content. Nothing
-                more, nothing less.
-              </ion-card-content>
-            </ion-card></ng-template
-          >
-          <ng-template swiperSlide
-            ><ion-card
-              mode="ios"
-              class="ion-no-margin ion-margin-bottom ion-margin-start"
-            >
-              <img
-                alt="Silhouette of mountains"
-                src="https://ionicframework.com/docs/img/demos/card-media.png"
-              />
-              <ion-card-header>
-                <ion-card-title class="content-3">Card Title</ion-card-title>
-                <ion-card-subtitle class="content-3"
-                  >Card Subtitle</ion-card-subtitle
-                >
-              </ion-card-header>
-
-              <ion-card-content class="content-3">
-                Here's a small text description for the card content. Nothing
-                more, nothing less.
-              </ion-card-content>
-            </ion-card></ng-template
-          >
-        </swiper>
+        <ion-list class="ion-margin-start ion-margin-end">
+          <div *ngIf="isLoaded[2]; else displayLoading3">
+            <div *ngFor="let each of this.allCourses">
+              <ion-card
+                mode="ios"
+                class="card ion-no-margin ion-margin-bottom"
+                (click)="onCardClick(each)"
+              >
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="4" class="ion-margin-end">
+                      <div
+                        *ngIf="
+                          each.imageUrl !== '' && each.imageUrl !== undefined;
+                          else defaultCardImage
+                        "
+                      >
+                        <img
+                          [alt]="each.courseName"
+                          [src]="each.imageUrl"
+                          class="cardImg"
+                        />
+                      </div>
+                    </ion-col>
+                    <ion-col>
+                      <ion-row>
+                        <ion-label
+                          class="ion-float-start font content-4 bold"
+                          >{{
+                            each.courseName !== "" && each.courseName !== undefined
+                              ? each.courseName
+                              : "No Course Name"
+                          }}</ion-label
+                        >
+                      </ion-row>
+                      <ion-row class="avatarRow ion-align-items-center">
+                        <ion-col
+                          size="auto"
+                          class="ion-no-padding avatarLecturer"
+                        >
+                          <ion-avatar>
+                            <div
+                              *ngIf="
+                                each.lecturerImageUrl !== '' &&
+                                  each.lecturerImageUrl !== undefined;
+                                else defaultLecturerImage
+                              "
+                            >
+                              <img
+                                [alt]="each.lecturerName"
+                                [src]="each.lecturerImageUrl"
+                              />
+                            </div>
+                          </ion-avatar>
+                        </ion-col>
+                        <ion-col
+                          class="ion-align-items-center ion-no-padding ion-text-start courseLecturerName"
+                        >
+                          <ion-label
+                            class="font courseLecturerName ion-no-margin"
+                          >
+                            {{
+                              each.lecturerName !== "" &&
+                              each.lecturerName !== undefined
+                                ? each.lecturerName
+                                : "Unknown"
+                            }}
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card>
+            </div>
+          </div>
+        </ion-list>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<!-- loading -->
+<ng-template #displayLoading>
+  <swiper [slidesPerView]="1" [initialSlide]="0">
+    <ng-template swiperSlide *ngFor="let e of [].constructor(3); let i = index">
+      <ion-card
+        mode="ios"
+        class="card ion-no-margin ion-margin-bottom ion-margin-start ion-margin-end"
+      >
+        <ion-grid>
+          <ion-row>
+            <ion-col size="4" class="ion-margin-end">
+              <ion-skeleton-text
+                class="cardImg"
+                [animated]="true"
+              ></ion-skeleton-text>
+            </ion-col>
+            <ion-col>
+              <ion-label class="">
+                <ion-skeleton-text [animated]="true"></ion-skeleton-text
+              ></ion-label>
+              <ion-row class="avatarRow ion-align-items-center">
+                <ion-col size="auto" class="ion-no-padding avatarLecturer">
+                  <ion-avatar>
+                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                  </ion-avatar>
+                </ion-col>
+                <ion-col class="ion-no-padding">
+                  <span>
+                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                  </span>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-progress-bar
+                  ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+                ></ion-progress-bar>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </ng-template>
+  </swiper>
+</ng-template>
+<ng-template #displayLoading2>
+  <swiper [slidesPerView]="1.5" [spaceBetween]="10" [initialSlide]="0">
+    <ng-template swiperSlide *ngFor="let e of [].constructor(3); let i = index">
+      <ion-card
+        mode="ios"
+        class="cardVertical ion-no-margin ion-margin-bottom ion-margin-start"
+        ><ion-skeleton-text
+          [animated]="true"
+          class="verticalCardImg"
+        ></ion-skeleton-text>
+        <ion-card-header>
+          <ion-card-title
+            ><ion-skeleton-text [animated]="true"></ion-skeleton-text
+          ></ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content class="content-3 ion-align-items-center">
+          <ion-row class="ion-padding-bottom">
+            <ion-col size="auto" class="ion-no-padding avatarLecturer">
+              <ion-avatar>
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-avatar>
+            </ion-col>
+            <ion-col
+              class="ion-align-items-center ion-no-padding ion-text-start courseLecturerName"
+            >
+              <ion-label class="font courseLecturerName ion-no-margin">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-progress-bar
+              ><ion-skeleton-text animated></ion-skeleton-text
+            ></ion-progress-bar>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </swiper>
+</ng-template>
+<ng-template #displayLoading3>
+  <ion-card
+    mode="ios"
+    class="card ion-no-margin ion-margin-bottom"
+    *ngFor="let e of [].constructor(3); let i = index"
+  >
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4" class="ion-margin-end">
+          <ion-skeleton-text animated class="cardImg"></ion-skeleton-text>
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-row>
+          <ion-row class="avatarRow ion-align-items-center">
+            <ion-col size="auto" class="ion-no-padding avatarLecturer">
+              <ion-avatar>
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-avatar>
+            </ion-col>
+            <ion-col
+              class="ion-align-items-center ion-no-padding ion-text-start courseLecturerName"
+            >
+              <ion-label class="font courseLecturerName ion-no-margin">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ng-template>
+
+<!--default image-->
+<ng-template #defaultLecturerImage>
+  <img src="../../../assets/images/user.png" />
+</ng-template>
+
+<ng-template #defaultCardImage>
+  <img src="../../../assets/images/learning_illust_1.png" class="cardImg" />
+</ng-template>
+
+<ng-template #defaultVerticalCardImage>
+  <img
+    src="../../../assets/images/learning_illust_1.png"
+    class="verticalCardImg"
+  />
+</ng-template>

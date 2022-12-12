@@ -1,3 +1,82 @@
-<p>
-  leaderboard works!
-</p>
+<app-header [back]="true"></app-header>
+<div class="titleContainer">
+  <label class="font bold header-3 titleText">Leaderboard</label>
+  <ion-button
+    fill="clear"
+    mode="ios"
+    shape="round"
+    size="small"
+    color="medium"
+    (click)="onShowFilter()"
+  >
+    <ion-icon name="filter-outline" slot="icon-only"> </ion-icon>
+  </ion-button>
+</div>
+<!-- <ion-segment value="a" mode="md" (ionChange)="onChangeSegment($event)">
+  <ion-segment-button value="a">
+    <ion-label>Assigned</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="c">
+    <ion-label>Completed</ion-label>
+  </ion-segment-button>
+</ion-segment> -->
+<div class="ion-margin-start ion-margin-end">
+  <ion-item
+    fill="outline"
+    mode="md"
+    class="font content-2 margin-top-1"
+    lines="none"
+    (click)="select.open()"
+    *ngIf="showFilter"
+  >
+    <app-searchable-selectable
+      title="My Courses"
+      [data]="this.myCourses"
+      [multiple]="false"
+      #select
+      itemTextField="courseName"
+      itemAccessField="courseName"
+      (selectedChanged)="onSelectFilter($event)"
+      [icon]="false"
+      [selectedData]="selectedFilter"
+      defaultText="All Courses"
+    ></app-searchable-selectable>
+  </ion-item>
+  <ion-button (click)="onReset()" fill="clear" mode="ios" *ngIf="showFilter"
+    >Reset</ion-button
+  >
+</div>
+<ion-grid class="ion-no-margin ion-margin-bottom">
+  <ion-row>
+    <ion-col size="12">
+      <ion-list *ngIf="!isLoading; else loading">
+        <ion-item
+          *ngFor="let each of userList"
+          detail="true"
+          button
+          lines="none"
+          class="Card font"
+          ><ion-label
+            ><h3 class="font bold">{{ each.username }}</h3>
+            <p class="font">{{ each.courseName }}</p></ion-label
+          ></ion-item
+        ></ion-list
+      ></ion-col
+    >
+  </ion-row>
+</ion-grid>
+<ng-template #loading>
+  <ion-list>
+    <ion-item
+      lines="none"
+      detail="true"
+      class="assignmentCard font"
+      *ngFor="let e of [].constructor(3); let i = index"
+    >
+      <ion-label
+        ><h3><ion-skeleton-text animated></ion-skeleton-text></h3>
+        <p><ion-skeleton-text animated></ion-skeleton-text></p
+      ></ion-label>
+    </ion-item>
+  </ion-list>
+</ng-template>

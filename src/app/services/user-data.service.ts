@@ -10,8 +10,6 @@ import {
   updateDoc,
 } from '@angular/fire/firestore';
 import { getDownloadURL, ref, Storage, uploadString } from '@angular/fire/storage';
-import { addDoc } from '@firebase/firestore';
-import { Observable } from 'rxjs';
 import { User } from '../modal/user';
 import { Photo } from '@capacitor/camera';
 import {HttpClient} from '@angular/common/http';
