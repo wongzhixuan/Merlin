@@ -17,6 +17,7 @@ import { CoursesComponent } from './main/courses/courses.component';
 import { AssignmentDetailsComponent } from './main/assignments/assignment-details/assignment-details.component';
 import { LeaderboardComponent } from './main/leaderboard/leaderboard.component';
 import { BadgesComponent } from './main/badges/badges.component';
+import { UserDetailsComponent } from './main/leaderboard/user-details/user-details.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { BadgesComponent } from './main/badges/badges.component';
     CoursesComponent,
     AssignmentDetailsComponent,
     LeaderboardComponent,
-    BadgesComponent
+    BadgesComponent,
+    UserDetailsComponent
   ],
   imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule,SearchableSelectableComponent, HttpClientModule, SwiperModule],
   exports: [
@@ -46,7 +48,8 @@ import { BadgesComponent } from './main/badges/badges.component';
     CoursesComponent,
     AssignmentDetailsComponent,
     LeaderboardComponent,
-    BadgesComponent
+    BadgesComponent,
+    UserDetailsComponent
   ],
 })
 export class SharedModule {}

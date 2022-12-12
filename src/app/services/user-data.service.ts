@@ -2,28 +2,48 @@ import { Injectable } from '@angular/core';
 import { Auth, updateProfile } from '@angular/fire/auth';
 import {
   collection,
+  collectionData,
   deleteDoc,
   doc,
   docData,
   Firestore,
+  limit,
+  orderBy,
+  query,
   setDoc,
   updateDoc,
 } from '@angular/fire/firestore';
-import { getDownloadURL, ref, Storage, uploadString } from '@angular/fire/storage';
+import {
+  getDownloadURL,
+  ref,
+  Storage,
+  uploadString,
+} from '@angular/fire/storage';
 import { User } from '../modal/user';
 import { Photo } from '@capacitor/camera';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { first, tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
 export class UserDataService {
   countries: any[] = [];
+  userList: User[] = [];
+  selectedUser = null;
   constructor(
     private firestore: Firestore,
     private auth: Auth,
     private storage: Storage,
     private http: HttpClient
   ) {}
+
+  getSelectedUser() {
+    return this.selectedUser;
+  }
+
+  setSelectedUser(user) {
+    this.selectedUser = user;
+  }
 
   createProfile(user: User) {
     const currentUser = this.auth.currentUser;
@@ -36,7 +56,7 @@ export class UserDataService {
       gender: user.gender,
       points: user.points,
       role: user.role,
-      imageUrl: ''
+      imageUrl: '',
     });
   }
 
@@ -63,11 +83,11 @@ export class UserDataService {
     });
   }
 
-  updateUserImage(){
+  updateUserImage() {
     const user = this.auth.currentUser;
     const userRef = doc(this.firestore, `users/${user.uid}`);
     return updateDoc(userRef, {
-      imageUrl:user.photoURL
+      imageUrl: user.photoURL,
     });
   }
 
@@ -76,37 +96,33 @@ export class UserDataService {
     return updateDoc(userRef, { points: newPoint });
   }
 
-  async uploadImage(cameraFile: Photo){
+  async uploadImage(cameraFile: Photo) {
     const user = this.auth.currentUser;
     const path = `users/${user.uid}/profile.jpg`;
     const storageRef = ref(this.storage, path);
 
-    try{
+    try {
       await uploadString(storageRef, cameraFile.base64String, 'base64');
 
       const imageUrl = await getDownloadURL(storageRef);
 
       const userDocRef = doc(this.firestore, `users/${user.uid}`);
       await updateDoc(userDocRef, {
-        imageUrl
+        imageUrl,
       });
-      updateProfile(user, {photoURL: imageUrl}).then(()=>{
-
-      });
+      updateProfile(user, { photoURL: imageUrl }).then(() => {});
       return true;
-    }
-    catch(e){
+    } catch (e) {
       return null;
     }
   }
 
-  async getCountries(){
+  async getCountries() {
     return this.http.get('https://restcountries.com/v3.1/all').toPromise();
   }
-
 }
 
-export class CountryData{
+export class CountryData {
   name: string;
   flag: string;
 }

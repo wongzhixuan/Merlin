@@ -50,7 +50,7 @@
           <ion-label class="infoText"
             >Gender:
             {{
-              userProfile.gender === "" ? "Undefined" : userProfile.gender
+              userProfile.gender === ""|| userProfile.gender === undefined ? "Undefined" : userProfile.gender
             }}</ion-label
           >
         </ion-col>
@@ -68,7 +68,7 @@
           <ion-label class="infoText"
             >Nationality:
             {{
-              userProfile.nationality === ""
+              userProfile.nationality === "" || userProfile.nationality === undefined
                 ? "Undefined"
                 : userProfile.nationality
             }}</ion-label
@@ -88,7 +88,7 @@
           <ion-label class="infoText"
             >School:
             {{
-              userProfile.school === "" ? "Undefined" : userProfile.school
+              userProfile.school === "" || userProfile.school === undefined ? "Undefined" : userProfile.school
             }}</ion-label
           >
         </ion-col>

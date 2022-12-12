@@ -4,6 +4,7 @@ import { AccountComponent } from './account/account.component';
 import { ManagePasswordComponent } from './account/manage-password/manage-password/manage-password.component';
 import { BadgesComponent } from './badges/badges.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { UserDetailsComponent } from './leaderboard/user-details/user-details.component';
 
 import { MainPage } from './main.page';
 
@@ -40,7 +41,7 @@ const routes: Routes = [
     //component: AccountComponent,
     children: [
       { path: '', component: LeaderboardComponent },
-      //{ path: 'manage-password', component: ManagePasswordComponent },
+      { path: 'user-details', component: UserDetailsComponent },
     ],
   },
 ];
