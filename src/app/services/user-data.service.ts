@@ -91,11 +91,6 @@ export class UserDataService {
     });
   }
 
-  updatePoints(id: string, newPoint: number) {
-    const userRef = doc(this.firestore, `users/${id}`);
-    return updateDoc(userRef, { points: newPoint });
-  }
-
   async uploadImage(cameraFile: Photo) {
     const user = this.auth.currentUser;
     const path = `users/${user.uid}/profile.jpg`;

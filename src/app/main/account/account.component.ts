@@ -96,9 +96,20 @@ export class AccountComponent implements OnInit, AfterContentInit {
   }
 
   async submitForm() {
-    const result = await this.userDataService.updateUserProfile(
-      this.userProfile
-    );
+    const result = await this.userDataService
+      .updateUserProfile(this.userProfile)
+      .then(() => {
+        this.feedbackService.showAlert(
+          'Profile Update Success!',
+          'You have successfully updated your profile'
+        );
+      })
+      .catch((error) =>
+        this.feedbackService.showAlert(
+          'Profile Update Failed',
+          'There are some errors during updating profile, please try again'
+        )
+      );
   }
 
   onCancel() {

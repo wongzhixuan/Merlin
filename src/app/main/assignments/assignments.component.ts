@@ -22,12 +22,17 @@ export class AssignmentsComponent implements OnInit, AfterContentInit {
   assignedList = [];
   completedList = [];
   isLoading = false;
+  courseDetails = null;
   constructor(private courseService: CourseService, private router: Router) {}
 
   async ngOnInit() {
-    await this.getData();
+    //await this.getData();
   }
-
+  async ionViewDidEnter(){
+    if(this.isLoading === false){
+    await this.getData();
+    }
+  }
   ngAfterContentInit(): void {}
   async getData() {
     this.isLoading = true;
@@ -43,54 +48,61 @@ export class AssignmentsComponent implements OnInit, AfterContentInit {
     this.myCourses = this.courseService.formatMyCourses();
     this.courseService.setMyCourseList(this.myCourses);
     //this.allCourses = this.courseService.formatAllCourses();
-
     this.allAssignments = await this.courseService.getAllAssignments();
     if (this.myCourses.length > 0) {
       this.myCourses.forEach(async (course) => {
-        const find = this.allAssignments.filter(
-          (each) => each.courseId === course.courseId
+        const currentCourse = await this.courseService.getCourse(
+          course.courseId
         );
-        console.log(find);
-        find.forEach(async (el) => {
-          const completed = await this.courseService.checkAssignmentStatus(
-            course.courseId,
-            el.assignmentId
+        const courseDocId = currentCourse[0].id;
+        console.log('courseDocId', courseDocId);
+        if (courseDocId) {
+          const find = this.allAssignments.filter(
+            (each) => each.courseId === course.courseId
           );
-          const assignment: Assignment = new Assignment();
-          assignment.assignmentId = el.assignmentId;
-          assignment.courseName = course.courseName;
-          assignment.courseId = el.courseId;
-          assignment.title = el.title;
-          assignment.description = el.description;
-          assignment.order = el.order;
-          assignment.points = el.points;
-          assignment.references = el.references;
-          assignment.startDate = el.startDate;
-          assignment.dueDate = el.dueDate;
-          assignment.id = el.id;
-          if (completed.length > 0) {
-            assignment.status = completed[0].status;
-            assignment.submission = completed[0].submission;
-          } else {
-            assignment.status = false;
-          }
-          const temp = this.assignmentList;
-          this.assignmentList = temp.filter(
-            (ass) => ass.assignmentId !== assignment.assignmentId
-          );
-          this.completedList = this.completedList.filter(
-            (ass) => ass.assignmentId !== assignment.assignmentId
-          );
-          this.assignedList = this.assignedList.filter(
-            (ass) => ass.assignmentId !== assignment.assignmentId
-          );
-          this.assignmentList.push(assignment);
-          if (assignment.status === true) {
-            this.completedList.push(assignment);
-          } else {
-            this.assignedList.push(assignment);
-          }
-        });
+
+          find.forEach(async (el) => {
+            const completed = await this.courseService.checkAssignmentStatus(
+              courseDocId,
+              el.assignmentId
+            );
+            const assignment: Assignment = new Assignment();
+            assignment.assignmentId = el.assignmentId;
+            assignment.courseName = course.courseName;
+            assignment.courseId = el.courseId;
+            assignment.title = el.title;
+            assignment.description = el.description;
+            assignment.order = el.order;
+            assignment.points = el.points;
+            assignment.references = el.references;
+            assignment.startDate = el.startDate;
+            assignment.dueDate = el.dueDate;
+            assignment.id = el.id;
+            assignment.courseDocId = courseDocId;
+            if (completed.length > 0) {
+              assignment.status = completed[0].status;
+              assignment.submission = completed[0].submission;
+            } else {
+              assignment.status = false;
+            }
+            const temp = this.assignmentList;
+            this.assignmentList = temp.filter(
+              (ass) => ass.assignmentId !== assignment.assignmentId
+            );
+            this.completedList = this.completedList.filter(
+              (ass) => ass.assignmentId !== assignment.assignmentId
+            );
+            this.assignedList = this.assignedList.filter(
+              (ass) => ass.assignmentId !== assignment.assignmentId
+            );
+            this.assignmentList.push(assignment);
+            if (assignment.status === true) {
+              this.completedList.push(assignment);
+            } else {
+              this.assignedList.push(assignment);
+            }
+          });
+        }
       });
     }
     this.isLoading = false;
@@ -103,61 +115,73 @@ export class AssignmentsComponent implements OnInit, AfterContentInit {
     //this.myCourses = this.courseService.getMyCourseList();
     if (this.myCourses.length > 0) {
       this.showFilter = !this.showFilter;
+      if(this.showFilter === false){
+        this.onReset();
+      }
     }
   }
 
   async onSelectFilter(event) {
-    //console.log(event[0]);
-    const course = event[0];
-    this.isLoading = true;
-    this.allAssignments = await this.courseService.getAllAssignments();
-    this.completedList = [];
-    this.assignedList = [];
-    const find = this.allAssignments.filter(
-      (each) => each.courseId === course.courseId
-    );
-    console.log(find);
-    find.forEach(async (el) => {
-      const completed = await this.courseService.checkAssignmentStatus(
-        course.courseId,
-        el.assignmentId
+    if (event.length > 0) {
+      const course = event[0];
+      const currentCourse = await this.courseService.getCourse(
+        course.courseId
       );
-      const assignment: Assignment = new Assignment();
-      assignment.assignmentId = el.assignmentId;
-      assignment.courseName = course.courseName;
-      assignment.courseId = el.courseId;
-      assignment.title = el.title;
-      assignment.description = el.description;
-      assignment.order = el.order;
-      assignment.points = el.points;
-      assignment.references = el.references;
-      assignment.startDate = el.startDate;
-      assignment.dueDate = el.dueDate;
-      assignment.id = el.id;
-      if (completed.length > 0) {
-        assignment.status = completed[0].status;
-        assignment.submission = completed[0].submission;
-      } else {
-        assignment.status = false;
-      }
-      const temp = this.assignmentList;
-      this.assignmentList = temp.filter(
-        (ass) => ass.assignmentId !== assignment.assignmentId
+      const courseDocId = currentCourse[0].id;
+      console.log('courseDocId', courseDocId);
+      this.isLoading = true;
+      this.allAssignments = await this.courseService.getAllAssignments();
+      this.completedList = [];
+      this.assignedList = [];
+      const find = this.allAssignments.filter(
+        (each) => each.courseId === course.courseId
       );
-      this.completedList = this.completedList.filter(
-        (ass) => ass.assignmentId !== assignment.assignmentId
-      );
-      this.assignedList = this.assignedList.filter(
-        (ass) => ass.assignmentId !== assignment.assignmentId
-      );
-      this.assignmentList.push(assignment);
-      if (assignment.status === true) {
-        this.completedList.push(assignment);
-      } else {
-        this.assignedList.push(assignment);
-      }
-    });
-    this.isLoading = false;
+      find.forEach(async (el) => {
+        const completed = await this.courseService.checkAssignmentStatus(
+          courseDocId,
+          el.assignmentId
+        );
+        const assignment: Assignment = new Assignment();
+        assignment.assignmentId = el.assignmentId;
+        assignment.courseName = course.courseName;
+        assignment.courseId = el.courseId;
+        assignment.title = el.title;
+        assignment.description = el.description;
+        assignment.order = el.order;
+        assignment.points = el.points;
+        assignment.references = el.references;
+        assignment.startDate = el.startDate;
+        assignment.dueDate = el.dueDate;
+        assignment.id = el.id;
+        assignment.courseDocId = courseDocId;
+        if (completed.length > 0) {
+          assignment.status = completed[0].status;
+          assignment.submission = completed[0].submission;
+        } else {
+          assignment.status = false;
+        }
+        const temp = this.assignmentList;
+        this.assignmentList = temp.filter(
+          (ass) => ass.assignmentId !== assignment.assignmentId
+        );
+        this.completedList = this.completedList.filter(
+          (ass) => ass.assignmentId !== assignment.assignmentId
+        );
+        this.assignedList = this.assignedList.filter(
+          (ass) => ass.assignmentId !== assignment.assignmentId
+        );
+        this.assignmentList.push(assignment);
+        if (assignment.status === true) {
+          this.completedList.push(assignment);
+        } else {
+          this.assignedList.push(assignment);
+        }
+      });
+      this.isLoading = false;
+    }
+    else{
+      this.onReset();
+    }
   }
 
   assignmentDetails(currentAssignment) {

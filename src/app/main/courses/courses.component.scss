@@ -24,6 +24,7 @@
   box-shadow: none;
   width: 100% !important;
   margin: 0px !important;
+  margin-bottom: 10px!important;
   background-color: var(--ion-color-light);
   background: var(--ion-color-light);
   border-radius: 10px;
@@ -34,6 +35,13 @@
   // --border-color: grey;
   // --border-width: 1.5px;
   --background: #e0e0e0;
+
+}
+.lessonBtnActive{
+  --border-radius: 10px!important;
+  // --border-color: grey;
+  // --border-width: 1.5px;
+  --background: #b3e5fc;
 
 }
 .lessonList{

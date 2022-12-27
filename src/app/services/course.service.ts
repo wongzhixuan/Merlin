@@ -4,6 +4,7 @@ import {
   collectionData,
   collectionSnapshots,
   doc,
+  docData,
   DocumentData,
   Firestore,
   onSnapshot,
@@ -184,10 +185,11 @@ export class CourseService {
       .toPromise();
   }
 
+
   getEnrollList(): Promise<DocumentData[]> {
     const user = this.auth.currentUser;
     const thisRef = collection(this.firestore, `users/${user.uid}/courses`);
-    const queryRef = query(thisRef, orderBy('lastVisit'));
+    const queryRef = query(thisRef, orderBy('lastVisit', 'desc'));
     // collectionSnapshots(queryRef)
     //   .pipe(
     //     tap((snapshots) => {
@@ -340,14 +342,79 @@ export class CourseService {
     const enrolData: EnrollData = new EnrollData();
     enrolData.courseId = id;
     enrolData.lastVisit = Timestamp.now();
-    enrolData.progress = '0';
+    enrolData.progress = 0;
     const user = this.auth.currentUser;
     const thisRef = doc(this.firestore, `users/${user.uid}/courses/${docId}`);
-    return setDoc(thisRef, {
-      courseId: enrolData.courseId,
-      lastVisit: enrolData.lastVisit,
-      progress: enrolData.progress,
-    });
+    return setDoc(
+      thisRef,
+      {
+        courseId: enrolData.courseId,
+        lastVisit: enrolData.lastVisit,
+        progress: enrolData.progress,
+      },
+      { merge: true }
+    );
+  }
+
+  updateRecentVisit(id, docId) {
+    const enrolData: EnrollData = new EnrollData();
+
+    enrolData.lastVisit = Timestamp.now();
+
+    const user = this.auth.currentUser;
+    const thisRef = doc(this.firestore, `users/${user.uid}/courses/${docId}`);
+    return setDoc(
+      thisRef,
+      {
+        lastVisit: enrolData.lastVisit,
+      },
+      { merge: true }
+    );
+  }
+
+  updateCourseProgress(updatedProgress, docId) {
+    const user = this.auth.currentUser;
+    const thisRef = doc(this.firestore, `users/${user.uid}/courses/${docId}`);
+    return setDoc(
+      thisRef,
+      {
+        progress: updatedProgress,
+      },
+      { merge: true }
+    );
+  }
+
+  updateLessonProgress(courseDocId, mylessonId, materialList) {
+    const user = this.auth.currentUser;
+    const thisRef = doc(
+      this.firestore,
+      `users/${user.uid}/courses/${courseDocId}/lessons/${mylessonId}`
+    );
+    return setDoc(
+      thisRef,
+      {
+        lessonId: mylessonId,
+        materials: materialList,
+      },
+      { merge: true }
+    );
+  }
+
+  getLessonProgress(courseDocId) {
+    const user = this.auth.currentUser;
+    const thisRef = collection(
+      this.firestore,
+      `users/${user.uid}/courses/${courseDocId}/lessons`
+    );
+    return collectionData(thisRef, { idField: 'id' }).pipe(first()).toPromise();
+  }
+
+  getCourse(id) {
+    const courseRef = collection(this.firestore, `courses`);
+    const queryRef = query(courseRef, where('courseId', '==', id));
+    return collectionData(queryRef, { idField: 'id' })
+      .pipe(first())
+      .toPromise();
   }
 
   // getLecturer(id: number) {
@@ -460,12 +527,19 @@ export class CourseService {
 
   updateAssignmentStatus(courseId, assignmentId, assignment: Assignment) {
     const user = this.auth.currentUser;
-    const assignmentRef = doc(this.firestore, `users/${user.uid}/courses/${courseId}/assignments/${assignmentId}`);
-    return setDoc(assignmentRef, {
-      status: assignment.status,
-      submission: assignment.submission,
-      assignmentId: assignment.assignmentId,
-      courseId: assignment.courseId
-    },{merge: true});
+    const assignmentRef = doc(
+      this.firestore,
+      `users/${user.uid}/courses/${courseId}/assignments/${assignmentId}`
+    );
+    return setDoc(
+      assignmentRef,
+      {
+        status: assignment.status,
+        submission: assignment.submission,
+        assignmentId: assignment.assignmentId,
+        courseId: assignment.courseId,
+      },
+      { merge: true }
+    );
   }
 }

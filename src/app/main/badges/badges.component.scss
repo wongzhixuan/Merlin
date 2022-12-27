@@ -1,0 +1,54 @@
+.titleContainer {
+  display: flex;
+  align-items: center;
+  margin: 0px 21px;
+}
+.titleText {
+  flex: 1 0;
+}
+ion-segment-button {
+  text-transform: none;
+  font-family: Gilroy-Medium;
+}
+
+.Card {
+  border-color: var(--ion-color-light-shade);
+  border-width: 2px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: none;
+
+  img{
+    object-fit: cover;
+  }
+  ion-card-header {
+    //white-space: nowrap;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    ion-label {
+      font-weight: 600;
+      font-family: Gilroy-Medium;
+      font-size: 16px;
+      color: black;
+    }
+  }
+  // ion-label {
+  //   h3 {
+  //     font-weight: 600 !important;
+  //     font-size: 16px !important;
+  //     margin-bottom: 10px;
+  //   }
+  //   p {
+  //     font-size: 12px !important;
+  //   }
+  // }
+}
+
+.imgSkeleton{
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+}

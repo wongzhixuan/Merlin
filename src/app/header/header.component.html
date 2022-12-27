@@ -10,13 +10,13 @@
       <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
       <ion-label class="ion-margin-start coin-text" *ngIf="!isLoading">{{userProfile?.points}}</ion-label>
     </ion-item>
-    <ion-buttons slot="end">
+    <!-- <ion-buttons slot="end">
       <ion-button>
         <ion-icon slot="icon-only" color="dark" name="notifications-outline" >
         </ion-icon>
         <ion-badge id="notifications-badge" color="primary" mode="md">5</ion-badge>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-toolbar>
   <ng-template #enableBack>
     <ion-toolbar>

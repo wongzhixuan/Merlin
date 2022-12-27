@@ -8,8 +8,10 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonInput } from '@ionic/angular';
+import { Badge } from 'src/app/modal/gamification';
 import { User } from 'src/app/modal/user';
 import { FeedbackService } from 'src/app/services/feedback.service';
+import { GamificationService } from 'src/app/services/gamification.service';
 import { UserAuthService } from 'src/app/services/user-auth.service';
 import { UserDataService } from 'src/app/services/user-data.service';
 
@@ -31,7 +33,8 @@ export class SignUpComponent implements OnInit {
     private router: Router,
     private auth: UserAuthService,
     private feedback: FeedbackService,
-    private userData: UserDataService
+    private userData: UserDataService,
+    private gamificationService: GamificationService
   ) {}
 
   ngOnInit() {
@@ -149,6 +152,12 @@ export class SignUpComponent implements OnInit {
       const user = this.auth.getUser();
       this.user.userId = user.uid;
       this.auth.updateUserProfile(this.user);
+
+      const badge = new Badge();
+      badge.badgeId = 1;
+      badge.badgeStatus = true;
+      badge.id = 'l1xpleGUpACeK4Nyp1GK';
+      this.gamificationService.updateBadgeStatus(badge.id, badge);
 
       console.log(this.user);
       this.router.navigateByUrl('/main', { replaceUrl: true });

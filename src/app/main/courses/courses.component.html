@@ -101,7 +101,7 @@
         <ion-col size="12">
           <span class="content-2 font bold">Lessons</span>
         </ion-col>
-        <ion-col size="12" *ngIf="this.nolesson">
+        <ion-col size="12" *ngIf="this.nolesson && !this.unenrolled">
           <ion-card class="lessonCard ion-align-items-center">
             <ion-label class="font bold content-3"
               >The lessons are not ready yet!</ion-label
@@ -119,9 +119,9 @@
 
         <ion-col
           size="12"
-          *ngFor="let lesson of currentCourse.lessons; let i = index"
+          *ngIf="!this.unenrolled"
         >
-          <ion-card class="lessonCard">
+          <ion-card class="lessonCard" *ngFor="let lesson of currentCourse.lessons; let i = index">
             <ion-grid>
               <ion-row>
                 <ion-col size="12">
@@ -162,7 +162,32 @@
                     lines="none"
                     class="lessonBtn content-2 font"
                     button
-                    (click)="onLessonMaterialClick(material.url)"
+                    (click)="onLessonMaterialClick(material, j, i)"
+                    *ngIf="material.status === false || material.status === undefined"
+                  >
+                    <ion-icon
+                      name="play-circle"
+                      slot="start"
+                      *ngIf="material.type === 0"
+                    ></ion-icon>
+                    <ion-icon
+                      name="link"
+                      slot="start"
+                      *ngIf="material.type === 1"
+                    ></ion-icon>
+                    <ion-label class="content-2 font">{{
+                      material.description !== "" &&
+                      material.description !== undefined
+                        ? material.description
+                        : "No Description"
+                    }}</ion-label>
+                  </ion-item>
+                  <ion-item
+                    lines="none"
+                    class="lessonBtnActive content-2 font"
+                    button
+                    (click)="onLessonMaterialClick(material, j, i)"
+                    *ngIf="material.status === true"
                   >
                     <ion-icon
                       name="play-circle"
@@ -186,6 +211,7 @@
             </ion-grid>
           </ion-card>
         </ion-col>
+
       </ion-row>
     </div>
     <!-- My Courses-->

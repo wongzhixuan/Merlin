@@ -42,6 +42,9 @@ export class DashboardComponent implements OnInit, AfterContentInit {
     this.courseList = [];
     this.enrollList = [];
     this.lecturerList = [];
+    this.recentVisit = [];
+    this.myCourses = [];
+    this.allCourses = [];
 
     this.courseList = await this.courseService.getCourseList();
     this.enrollList = await this.courseService.getEnrollList();

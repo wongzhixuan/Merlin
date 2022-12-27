@@ -9,10 +9,10 @@
     </ion-row> -->
 
     <!-- Recent Visit -->
-    <ion-row *ngIf="this.recentVisit.length > 0">
+    <ion-row *ngIf="isLoaded[0] && this.recentVisit.length > 0">
       <ion-col
         size="12"
-        class="ion-padding-start ion-padding-end titleContainer"
+        class="ion-padding-start ion-padding-end titleContainer" *ngIf="this.recentVisit.length > 0"
       >
         <label class="font bold header-3 titleText">Recent Visits</label>
       </ion-col>
@@ -107,10 +107,11 @@
     </ion-row>
 
     <!-- My Courses -->
-    <ion-row *ngIf="this.myCourses.length > 0">
+    <ion-row *ngIf="this.myCourses.length > 0 && isLoaded[1]">
       <ion-col
         size="12"
         class="ion-padding-start ion-padding-end titleContainer"
+        *ngIf="this.myCourses.length > 0"
       >
         <label class="font bold header-3 titleText">My Courses</label>
         <ion-button
@@ -201,6 +202,7 @@
       <ion-col
         size="12"
         class="ion-padding-start ion-padding-end titleContainer"
+
       >
         <label class="font bold header-3 titleText">All Courses</label>
         <ion-button
@@ -210,12 +212,13 @@
           mode="ios"
           size="small"
           (click)="onSeeAllClick(2)"
+          *ngIf="this.allCourses.length > 0"
           >See All</ion-button
         >
       </ion-col>
       <ion-col size="12" class="ion-no-padding ion-padding-bottom">
         <ion-list class="ion-margin-start ion-margin-end">
-          <div *ngIf="isLoaded[2]; else displayLoading3">
+          <div *ngIf="this.allCourses.length > 0; else displayLoading3">
             <div *ngFor="let each of this.allCourses">
               <ion-card
                 mode="ios"

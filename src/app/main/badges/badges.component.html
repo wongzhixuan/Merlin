@@ -1,3 +1,137 @@
-<p>
-  badges works!
-</p>
+<app-header [back]="true"></app-header>
+<ion-content>
+  <div class="titleContainer">
+    <label class="font bold header-3 titleText">Badges</label>
+    <!-- <ion-button
+      fill="clear"
+      mode="ios"
+      shape="round"
+      size="small"
+      color="medium"
+      (click)="onShowFilter()"
+    >
+      <ion-icon name="filter-outline" slot="icon-only"> </ion-icon>
+    </ion-button> -->
+    <ion-button
+      fill="clear"
+      mode="ios"
+      shape="round"
+      size="small"
+      color="medium"
+      (click)="onRefresh()"
+    >
+      <ion-icon name="refresh-outline" slot="icon-only"> </ion-icon>
+    </ion-button>
+  </div>
+
+  <ion-segment
+    value="a"
+    mode="md"
+    (ionChange)="onChangeSegment($event)"
+    mode="md"
+  >
+    <ion-segment-button value="a">
+      <ion-label>All</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="b">
+      <ion-label>Unearned</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="c">
+      <ion-label>Earned</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <ion-grid *ngIf="!isLoading; else loading">
+    <ion-row *ngIf="currentSegment === 'a'">
+      <ion-col *ngFor="let badge of badgeList; let i = index" size="6">
+        <ion-card class="Card" button>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto" class="ion-no-padding">
+              <img
+                [src]="
+                  badge.badgeStatus === true
+                    ? badge.badgeUrl
+                    : badge.badgeUrlGrey
+                "
+                [alt]="badge.badgeName"
+                width="128"
+                height="128"
+              />
+            </ion-col>
+          </ion-row>
+          <ion-card-header>
+            <ion-label>{{ badge.badgeName }}</ion-label>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="currentSegment === 'c'">
+      <ion-col *ngFor="let badge of earnedList; let i = index" size="6">
+        <ion-card class="Card" button>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto" class="ion-no-padding">
+              <img
+                [src]="
+                  badge.badgeStatus === true
+                    ? badge.badgeUrl
+                    : badge.badgeUrlGrey
+                "
+                [alt]="badge.badgeName"
+                width="128"
+                height="128"
+              />
+            </ion-col>
+          </ion-row>
+          <ion-card-header>
+            <ion-label>{{ badge.badgeName }}</ion-label>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="currentSegment === 'b'">
+      <ion-col *ngFor="let badge of unEarnList; let i = index" size="6">
+        <ion-card class="Card" button>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto" class="ion-no-padding">
+              <img
+                [src]="
+                  badge.badgeStatus === true
+                    ? badge.badgeUrl
+                    : badge.badgeUrlGrey
+                "
+                [alt]="badge.badgeName"
+                width="128"
+                height="128"
+              />
+            </ion-col>
+          </ion-row>
+          <ion-card-header>
+            <ion-label>{{ badge.badgeName }}</ion-label>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ng-template #loading>
+  <ion-grid>
+    <ion-row >
+      <ion-col size="6" *ngFor="let e of [].constructor(6); let i = index">
+        <ion-card class="Card">
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto" class="ion-no-padding">
+              <ion-skeleton-text animated="true" class="imgSkeleton"></ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+          <ion-card-header>
+            <ion-label
+              ><ion-skeleton-text
+                animated
+
+              ></ion-skeleton-text
+            ></ion-label>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ng-template>

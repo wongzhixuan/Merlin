@@ -33,9 +33,17 @@ import { UserDetailsComponent } from './main/leaderboard/user-details/user-detai
     AssignmentDetailsComponent,
     LeaderboardComponent,
     BadgesComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
   ],
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule,SearchableSelectableComponent, HttpClientModule, SwiperModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    SearchableSelectableComponent,
+    HttpClientModule,
+    SwiperModule,
+  ],
   exports: [
     HeaderComponent,
     DashboardComponent,
@@ -49,7 +57,7 @@ import { UserDetailsComponent } from './main/leaderboard/user-details/user-detai
     AssignmentDetailsComponent,
     LeaderboardComponent,
     BadgesComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
   ],
 })
 export class SharedModule {}

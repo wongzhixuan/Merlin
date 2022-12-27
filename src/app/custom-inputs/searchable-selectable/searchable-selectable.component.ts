@@ -38,6 +38,9 @@ export class SearchableSelectableComponent implements OnChanges, OnInit {
           item.selected = true;
         });
       }
+      else{
+        this.selected = [];
+      }
   }
   ngOnChanges(changes: SimpleChanges): void{
     this.filtered = this.data;

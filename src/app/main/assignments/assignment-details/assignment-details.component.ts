@@ -9,8 +9,12 @@ import {
   uploadString,
 } from '@angular/fire/storage';
 import { IonModal, IonProgressBar } from '@ionic/angular';
+import { Badge } from 'src/app/modal/gamification';
+import { UserLog } from 'src/app/modal/log';
 import { CourseService } from 'src/app/services/course.service';
 import { FeedbackService } from 'src/app/services/feedback.service';
+import { GamificationService } from 'src/app/services/gamification.service';
+import { LogService } from 'src/app/services/log.service';
 
 @Component({
   selector: 'app-assignment-details',
@@ -27,15 +31,19 @@ export class AssignmentDetailsComponent implements OnInit, AfterContentInit {
   selectedFile: any = null;
   uploadProgress: any = 0;
   displayLoading = false;
+  submitBadge = '5lp8jINoVeEblWmrrGEO';
+  userLog = null;
   constructor(
     private courseService: CourseService,
     private location: Location,
     private auth: Auth,
     private storage: Storage,
-    private feedbackService: FeedbackService
+    private feedbackService: FeedbackService,
+    private gameService: GamificationService,
+    private logService: LogService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     if (history.state.details === true) {
       this.title = 'Details';
       this.currentAssignment = this.courseService.getCurrentAssignment();
@@ -50,6 +58,18 @@ export class AssignmentDetailsComponent implements OnInit, AfterContentInit {
       this.dueDate = `${due.toDateString()} ${due.toLocaleTimeString()}`;
       const start = this.currentAssignment.startDate.toDate();
       this.startDate = `${start.toDateString()} ${start.toLocaleTimeString()}`;
+      //get current log
+      const USERLOG = await this.logService.getUserLog();
+      // set default userLog if userLog is undefined
+      if (USERLOG === undefined) {
+        const log = new UserLog();
+        log.videoLog = 0;
+        log.readLog = 0;
+        log.assignmentLog = 0;
+        this.userLog = log;
+      } else {
+        this.userLog = USERLOG;
+      }
     } else {
       this.navigateBack();
     }
@@ -129,13 +149,38 @@ export class AssignmentDetailsComponent implements OnInit, AfterContentInit {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             console.log('File available at', downloadURL);
             //await loading.dismiss();
+            if(this.currentAssignment.status === false){
+              this.userLog.assignmentLog = this.userLog.assignmentLog + 1;
+              this.logService.updateUserLog(this.userLog).then(()=>{}).catch((error)=>console.log(error));
+            }
             this.currentAssignment.status = true;
             this.currentAssignment.submission = downloadURL;
             const result = await this.courseService.updateAssignmentStatus(
-              this.currentAssignment.courseId,
+              this.currentAssignment.courseDocId,
               this.currentAssignment.id,
               this.currentAssignment
             );
+
+            const checkBadgeStatus = await this.gameService.checkBadgeStatus(
+              this.submitBadge
+            );
+            const badge = new Badge();
+            badge.id = this.submitBadge;
+            badge.badgeId = 2;
+            badge.badgeStatus = true;
+            if (checkBadgeStatus !== undefined && checkBadgeStatus !== null) {
+            } else {
+              this.gameService
+                .updateBadgeStatus(this.submitBadge, badge)
+                .then(() => {
+                  this.feedbackService.showAlert(
+                    'You Earned A Badge!',
+                    'Congratulations! You have earned a badge by submitting your first work.' +
+                      'You can check the earned badges at the badge page.'
+                  );
+                })
+                .catch((error) => console.log(error));
+            }
           });
         }
       );

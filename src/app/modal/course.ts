@@ -14,7 +14,7 @@ export class Course {
 
 export class EnrollData {
   courseId: number;
-  progress: string;
+  progress: number;
   lastVisit: Timestamp;
 }
 
@@ -25,6 +25,7 @@ export class LecturerData {
 }
 
 export class CourseData {
+  id: string;
   courseId: number;
   lecturerId: number;
   categoryId: number;
@@ -71,6 +72,7 @@ export class Assignment {
   status: boolean;
   submission: string;
   id: string;
+  courseDocId: string;
 }
 
 export class Reference {

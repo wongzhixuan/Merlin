@@ -39,12 +39,11 @@ ion-searchbar.custom {
   object-fit: cover;
   width: 100px !important;
   height: 80px !important;
-  max-width: 100px !important; 
+  max-width: 100px !important;
   max-height: 100px !important;
   border-radius: 6px;
-
 }
-.verticalCardImg{
+.verticalCardImg {
   object-fit: cover;
   width: 100% !important;
   height: 1300px !important;
@@ -76,11 +75,14 @@ ion-avatar {
   padding-right: 5px !important;
 }
 
-.cardVertical{
+.cardVertical {
   border: var(--ion-color-light-shade) solid 2px;
   box-shadow: none;
   width: 100% !important;
   height: 100% !important;
+  ion-card-header{
+    height: 75px!important;
+  }
 }
 
 ion-progress-bar {
@@ -108,8 +110,8 @@ ion-progress-bar {
   }
 }
 
-.courseLecturerName{
-  ion-label{
+.courseLecturerName {
+  ion-label {
     font-size: 10px;
   }
 }
